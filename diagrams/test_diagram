@@ -1,0 +1,13 @@
+digraph {
+	nodesep=0.8 rankdir=LR ranksep=1.0 splines=ortho
+	Reference [label=Reference fillcolor=lightblue shape=box style="rounded,filled"]
+	Plant [label=Plant fillcolor=lightblue shape=box style="rounded,filled"]
+	Output [label=Output fillcolor=lightblue shape=box style="rounded,filled"]
+	Sum [label=Sum fillcolor=lightblue shape=box style="rounded,filled"]
+	Controller [label=Controller fillcolor=lightblue shape=box style="rounded,filled"]
+	Reference -> Sum
+	Sum -> Controller
+	Controller -> Plant
+	Plant -> Output
+	Output -> Sum
+}

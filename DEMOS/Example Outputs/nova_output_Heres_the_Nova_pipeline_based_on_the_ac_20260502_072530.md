@@ -1,0 +1,89 @@
+Here's the Nova pipeline based on the actual codebase scan:
+
+---
+
+## 🧠 Nova Pipeline Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        USER INPUT                               │
+│              (Text via GUI / Voice via TTS)                     │
+└──────────────────────────┬──────────────────────────────────────┘
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    NovaAssistant (Main Class)                    │
+│         Inherits: NovaTTS + NovaSelfImproveUI + NovaRouter      │
+│                                                                 │
+│  • Loads nova_state.json  (persistent memory + history)         │
+│  • Formats SYSTEM_PROMPT with location/context                  │
+│  • Initialises TTS engine                                       │
+└──────────────────────────┬──────────────────────────────────────┘
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                       NovaRouter                                │
+│                                                                 │
+│  Routes the query to the appropriate handler:                   │
+│  • Direct AI response                                           │
+│  • Tool call                                                    │
+│  • Planner (multi-step task)                                    │
+└───────┬──────────────────┬──────────────────┬───────────────────┘
+        │                  │                  │
+        ▼                  ▼                  ▼
+┌──────────────┐  ┌────────────────┐  ┌──────────────────────────┐
+│  WorkingAI   │  │  ToolRegistry  │  │      TaskPlanner          │
+│              │  │                │  │                           │
+│ • Local LLM  │  │ • file_explorer│  │  Breaks complex tasks     │
+│   (Ollama)   │  │ • web search   │  │  into ordered steps       │
+│ • Cloud LLM  │  │ • YouTube      │  │         │                 │
+│  (OpenRouter)│  │ • camera_vision│  │         ▼                 │
+│              │  │ • code runner  │  │   AgentExecutor           │
+│ token_limit_ │  │ • download     │  │  Executes each step,      │
+│ callback     │  │ • play_music   │  │  passes results forward   │
+│ token_       │  │ • self_inspect │  │                           │
+│ callback     │  │ • sympy_exec   │  │                           │
+└──────┬───────┘  └───────┬────────┘  └──────────────┬────────────┘
+        │                  │                          │
+        └──────────────────┴──────────────────────────┘
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                     SUPERVISOR / MERGER                         │
+│                                                                 │
+│  • Merges multi-agent results                                   │
+│  • Resolves contradictions                                      │
+│  • Preserves IMAGE / PLOT / AUDIO tags                          │
+│  • Formats final response                                       │
+└──────────────────────────┬──────────────────────────────────────┘
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                      OUTPUT LAYER                               │
+│                                                                 │
+│  • GUI (Tkinter canvas — CodeWindow, LatexWindow)               │
+│  • TTS speech output (SAPI5 / NovaTTS)                          │
+│  • Web images  → web_images/                                    │
+│  • Plots       → plots/  (Plotly HTML)                          │
+│  • Downloads   → downloads/                                     │
+│  • State saved → nova_state.json                                │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### Key Design Points
+
+| Component | Role |
+|---|---|
+| `NovaAssistant` | Orchestrator — owns state, TTS, UI |
+| `NovaRouter` | Decides *how* to handle each query |
+| `WorkingAI` | LLM interface (local Ollama or cloud OpenRouter) |
+| `ToolRegistry` | All callable tools, audited at startup |
+| `TaskPlanner` | Decomposes multi-step tasks |
+| `AgentExecutor` | Runs each planned step sequentially |
+| `nova_state.json` | Persistent memory across sessions |
+| `NovaTTS` | Text-to-speech mixin |
+| `NovaSelfImproveUI` | Self-inspection and code improvement mixin |
+
+The diagram generated by the agent is embedded above. The pipeline is essentially a **router-planner-executor** pattern sitting on top of a dual-backend LLM (local + cloud), with persistent state threading through the whole thing.

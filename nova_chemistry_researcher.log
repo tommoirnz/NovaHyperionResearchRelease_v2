@@ -1,0 +1,7 @@
+2026-05-17 06:52:33,396 [INFO] Dashboard → http://localhost:8083
+2026-05-17 06:52:33,396 [INFO] Cancer Researcher started. Dashboard → http://localhost:8083
+2026-05-17 06:52:33,396 [WARNING] Docking not available — nova_docking.py must be in same directory
+2026-05-17 06:52:33,398 [INFO] --- Cycle 1 | novel kinase inhibitor scaffolds targeting EGFR/HER2 overexpressed in  ---
+2026-05-17 06:52:35,769 [WARNING] Ollama generate failed: All connection attempts failed
+2026-05-17 06:52:35,771 [WARNING] Empty response from Ollama
+2026-05-17 06:52:35,773 [INFO] Next cycle in 20s

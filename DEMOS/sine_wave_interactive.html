@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sine Wave Visualiser & Synthesiser</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: #0d1117;
+            color: #e6edf3;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px 16px;
+        }
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            margin-bottom: 6px;
+            background: linear-gradient(90deg, #58a6ff, #bc8cff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .subtitle {
+            font-size: 0.85rem;
+            color: #8b949e;
+            margin-bottom: 24px;
+        }
+        .card {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 14px;
+            padding: 28px 32px;
+            width: 100%;
+            max-width: 860px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 32px rgba(0,0,0,0.4);
+        }
+        #plot { width: 100%; height: 340px; }
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            margin-top: 8px;
+        }
+        .control-group label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #8b949e;
+            margin-bottom: 10px;
+        }
+        .control-group label span {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #58a6ff;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #21262d;
+            outline: none;
+            cursor: pointer;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #58a6ff, #bc8cff);
+            cursor: pointer;
+            box-shadow: 0 0 8px rgba(88,166,255,0.5);
+            transition: box-shadow 0.2s;
+        }
+        input[type=range]::-webkit-slider-thumb:hover {
+            box-shadow: 0 0 16px rgba(88,166,255,0.8);
+        }
+        #freq-slider { accent-color: #58a6ff; }
+        #amp-slider  { accent-color: #bc8cff; }
+        .btn-row {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        button {
+            padding: 11px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.18s;
+            letter-spacing: 0.03em;
+        }
+        #toggle-btn {
+            background: linear-gradient(135deg, #238636, #2ea043);
+            color: #fff;
+            box-shadow: 0 2px 12px rgba(46,160,67,0.35);
+        }
+        #toggle-btn:hover { filter: brightness(1.15); transform: translateY(-1px); }
+        #toggle-btn.playing {
+            background: linear-gradient(135deg, #da3633, #f85149);
+            box-shadow: 0 2px 12px rgba(248,81,73,0.35);
+        }
+        #reset-btn {
+            background: #21262d;
+            color: #c9d1d9;
+            border: 1px solid #30363d;
+        }
+        #reset-btn:hover { background: #30363d; transform: translateY(-1px); }
+        .info-bar {
+            display: flex;
+            justify-content: space-around;
+            background: #0d1117;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-top: 20px;
+            border: 1px solid #21262d;
+            font-size: 0.8rem;
+            color: #8b949e;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .info-item strong { color: #e6edf3; }
+        .status-dot {
+            display: inline-block;
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: #3fb950;
+            margin-right: 6px;
+            animation: pulse 1.4s infinite;
+        }
+        .status-dot.off { background: #484f58; animation: none; }
+        @keyframes pulse {
+            0%,100% { opacity: 1; }
+            50%      { opacity: 0.3; }
+        }
+
+        /* ── Waveform selector ── */
+        .wave-selector {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+        .wave-btn {
+            padding: 7px 20px;
+            border-radius: 20px;
+            border: 1px solid #30363d;
+            background: #21262d;
+            color: #8b949e;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+            letter-spacing: 0.04em;
+        }
+        .wave-btn:hover { background: #30363d; color: #e6edf3; }
+        .wave-btn.active {
+            background: linear-gradient(135deg, #58a6ff22, #bc8cff22);
+            border-color: #58a6ff;
+            color: #58a6ff;
+        }
+
+        /* ── Phase slider ── */
+        #phase-slider { accent-color: #3fb950; }
+
+        /* ── Harmonics panel ── */
+        .harmonics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-top: 8px;
+        }
+        .harmonic-item label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #8b949e;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        .harmonic-item label span { color: #bc8cff; }
+
+        /* ── Spectrum bar chart ── */
+        #spectrum { width: 100%; height: 200px; }
+
+        @media (max-width: 560px) {
+            .controls { grid-template-columns: 1fr; }
+            .harmonics-grid { grid-template-columns: 1fr 1fr; }
+            h1 { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+<h1>Sine Wave Visualiser &amp; Synthesiser</h1>
+<p class="subtitle">Adjust frequency, amplitude, phase &amp; harmonics - see it and hear it in real time</p>
+
+<!-- ── Waveform type ── -->
+<div class="card" style="padding: 20px 32px;">
+    <div class="wave-selector" id="wave-selector">
+        <button class="wave-btn active" data-wave="sine">Sine</button>
+        <button class="wave-btn" data-wave="square">Square</button>
+        <button class="wave-btn" data-wave="sawtooth">Sawtooth</button>
+        <button class="wave-btn" data-wave="triangle">Triangle</button>
+    </div>
+</div>
+
+<!-- ── Main plot ── -->
+<div class="card">
+    <div id="plot"></div>
+    <div class="info-bar">
+        <div class="info-item"><strong id="period-val">-</strong> period</div>
+        <div class="info-item"><strong id="wavelength-val">-</strong> wavelength (at 343 m/s)</div>
+        <div class="info-item"><strong id="note-val">-</strong> nearest musical note</div>
+        <div class="info-item"><strong id="rms-val">-</strong> RMS amplitude</div>
+        <div class="info-item">
+            <span class="status-dot off" id="status-dot"></span>
+            <span id="status-text">Audio off</span>
+        </div>
+    </div>
+</div>
+
+<!-- ── Controls ── -->
+<div class="card">
+    <div class="controls">
+        <div class="control-group">
+            <label>Frequency <span id="freq-display">1.0 Hz</span></label>
+            <input type="range" id="freq-slider" min="0.1" max="20" step="0.1" value="1.0">
+        </div>
+        <div class="control-group">
+            <label>Amplitude <span id="amp-display">1.00</span></label>
+            <input type="range" id="amp-slider" min="0.1" max="2.0" step="0.01" value="1.0">
+        </div>
+        <div class="control-group">
+            <label>Phase <span id="phase-display">0.00 rad</span></label>
+            <input type="range" id="phase-slider" min="0" max="6.2832" step="0.01" value="0">
+        </div>
+        <div class="control-group">
+            <label>Audio Freq (Hz) <span id="audio-freq-display">440 Hz</span></label>
+            <input type="range" id="audio-freq-slider" min="20" max="2000" step="1" value="440">
+        </div>
+    </div>
+    <div class="info-bar" style="margin-top:16px;">
+        <div class="info-item">Frequency range: <strong>0.1 - 20 Hz</strong></div>
+        <div class="info-item">Amplitude range: <strong>0.1 - 2.0</strong></div>
+        <div class="info-item">Phase range: <strong>0 - 2π rad</strong></div>
+        <div class="info-item">Audio: <strong>Web Audio API OscillatorNode</strong></div>
+    </div>
+</div>
+
+<!-- ── Harmonics ── -->
+<div class="card">
+    <div style="font-size:0.85rem; font-weight:700; color:#8b949e; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:14px;">
+        Harmonic Mixer <span style="font-size:0.75rem; color:#484f58; text-transform:none;">(adds overtones to the waveform)</span>
+    </div>
+    <div class="harmonics-grid" id="harmonics-grid"></div>
+</div>
+
+<!-- ── Spectrum ── -->
+<div class="card">
+    <div style="font-size:0.85rem; font-weight:700; color:#8b949e; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:14px;">
+        Frequency Spectrum
+    </div>
+    <div id="spectrum"></div>
+</div>
+
+<!-- ── Buttons ── -->
+<div class="card" style="padding: 20px 32px;">
+    <div class="btn-row">
+        <button id="toggle-btn">&#9654; Start Audio</button>
+        <button id="reset-btn">&#8634; Reset</button>
+        <button id="snapshot-btn" style="background:#21262d; color:#c9d1d9; border:1px solid #30363d;">&#128247; Snapshot</button>
+    </div>
+</div>
+
+<script>
+// ─── State ────────────────────────────────────────────────────────────────────
+let freq      = 1.0;
+let amp       = 1.0;
+let phase     = 0.0;
+let audioFreq = 440;
+let waveType  = 'sine';
+let harmonics = [1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]; // 8 harmonics
+
+let audioCtx   = null;
+let oscillators = [];
+let gainNodes   = [];
+let masterGain  = null;
+let isPlaying  = false;
+
+// ─── Musical note lookup ──────────────────────────────────────────────────────
+const NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+function freqToNote(f) {
+    if (f < 16.35) return '< C0';
+    const midi = Math.round(12 * Math.log2(f / 440) + 69);
+    const note = NOTE_NAMES[((midi % 12) + 12) % 12];
+    const oct  = Math.floor(midi / 12) - 1;
+    return note + oct;
+}
+
+// ─── Waveform generators ──────────────────────────────────────────────────────
+function sineVal(t, f, a, ph) { return a * Math.sin(2 * Math.PI * f * t + ph); }
+function squareVal(t, f, a, ph) { return a * Math.sign(Math.sin(2 * Math.PI * f * t + ph)); }
+function sawtoothVal(t, f, a, ph) {
+    const p = 1 / f;
+    const tp = ((t + ph / (2 * Math.PI * f)) % p + p) % p;
+    return a * (2 * tp / p - 1);
+}
+function triangleVal(t, f, a, ph) {
+    const p = 1 / f;
+    const tp = ((t + ph / (2 * Math.PI * f)) % p + p) % p;
+    return a * (4 * Math.abs(tp / p - 0.5) - 1);
+}
+
+function waveValue(t, f, a, ph, type) {
+    switch(type) {
+        case 'square':   return squareVal(t, f, a, ph);
+        case 'sawtooth': return sawtoothVal(t, f, a, ph);
+        case 'triangle': return triangleVal(t, f, a, ph);
+        default:         return sineVal(t, f, a, ph);
+    }
+}
+
+// ─── Harmonic sum waveform ────────────────────────────────────────────────────
+function compositeY(xs, f, a, ph) {
+    return xs.map(t => {
+        let v = 0;
+        for (let h = 0; h < harmonics.length; h++) {
+            if (harmonics[h] === 0) continue;
+            v += harmonics[h] * waveValue(t, f * (h + 1), a, ph, waveType);
+        }
+        // normalise by sum of harmonic weights to keep amplitude consistent
+        const total = harmonics.reduce((s, w) => s + Math.abs(w), 0) || 1;
+        return v / total * a;
+    });
+}
+
+// ─── RMS ─────────────────────────────────────────────────────────────────────
+function rms(ys) {
+    const sum = ys.reduce((s, v) => s + v * v, 0);
+    return Math.sqrt(sum / ys.length);
+}
+
+// ─── X axis ──────────────────────────────────────────────────────────────────
+const N = 800;
+function makeX(f) {
+    const duration = Math.max(3 / f, 0.5);
+    const xs = [];
+    for (let i = 0; i < N; i++) xs.push(i * duration / (N - 1));
+    return xs;
+}
+
+// ─── Plotly main plot ─────────────────────────────────────────────────────────
+const initX = makeX(freq);
+const initY = compositeY(initX, freq, amp, phase);
+
+const trace = {
+    x: initX, y: initY,
+    type: 'scatter', mode: 'lines',
+    line: { color: '#58a6ff', width: 2.5, shape: 'spline' },
+    fill: 'tozeroy',
+    fillcolor: 'rgba(88,166,255,0.08)',
+    name: 'Waveform'
+};
+
+const layout = {
+    paper_bgcolor: '#161b22',
+    plot_bgcolor:  '#0d1117',
+    margin: { l: 50, r: 20, t: 20, b: 50 },
+    xaxis: {
+        title: { text: 'Time (s)', font: { color: '#8b949e', size: 12 } },
+        color: '#8b949e', gridcolor: '#21262d', zerolinecolor: '#30363d',
+        tickfont: { color: '#8b949e' }
+    },
+    yaxis: {
+        title: { text: 'Amplitude', font: { color: '#8b949e', size: 12 } },
+        color: '#8b949e', gridcolor: '#21262d', zerolinecolor: '#30363d',
+        tickfont: { color: '#8b949e' },
+        range: [-2.4, 2.4]
+    },
+    showlegend: false,
+    transition: { duration: 60, easing: 'cubic-in-out' }
+};
+
+Plotly.newPlot('plot', [trace], layout, { responsive: true, displayModeBar: false });
+
+// ─── Spectrum plot ────────────────────────────────────────────────────────────
+function spectrumData() {
+    const labels = harmonics.map((_, i) => 'H' + (i + 1));
+    const colors = harmonics.map(w => w > 0 ? '#bc8cff' : '#484f58');
+    return [{
+        x: labels,
+        y: harmonics.map(Math.abs),
+        type: 'bar',
+        marker: { color: colors },
+        name: 'Harmonics'
+    }];
+}
+
+const specLayout = {
+    paper_bgcolor: '#161b22',
+    plot_bgcolor:  '#0d1117',
+    margin: { l: 40, r: 20, t: 10, b: 40 },
+    xaxis: { color: '#8b949e', gridcolor: '#21262d', tickfont: { color: '#8b949e' } },
+    yaxis: { color: '#8b949e', gridcolor: '#21262d', tickfont: { color: '#8b949e' }, range: [0, 1.1] },
+    showlegend: false
+};
+
+Plotly.newPlot('spectrum', spectrumData(), specLayout, { responsive: true, displayModeBar: false });
+
+// ─── Harmonic sliders ─────────────────────────────────────────────────────────
+const harmonicsGrid = document.getElementById('harmonics-grid');
+harmonics.forEach((val, i) => {
+    const div = document.createElement('div');
+    div.className = 'harmonic-item';
+    div.innerHTML = `
+        <label>H${i+1} (${(i+1)}x) <span id="h${i}-val">${val.toFixed(2)}</span></label>
+        <input type="range" min="0" max="1" step="0.01" value="${val}"
+               id="h${i}-slider" style="accent-color:#bc8cff;">
+    `;
+    harmonicsGrid.appendChild(div);
+    div.querySelector(`#h${i}-slider`).addEventListener('input', e => {
+        harmonics[i] = parseFloat(e.target.value);
+        document.getElementById(`h${i}-val`).textContent = harmonics[i].toFixed(2);
+        updatePlot();
+        updateAudioHarmonics();
+    });
+});
+
+// ─── Info bar update ──────────────────────────────────────────────────────────
+function updateInfo(ys) {
+    document.getElementById('period-val').textContent     = (1/freq).toFixed(3) + ' s';
+    document.getElementById('wavelength-val').textContent = (343/freq).toFixed(2) + ' m';
+    document.getElementById('note-val').textContent       = freqToNote(audioFreq);
+    document.getElementById('rms-val').textContent        = rms(ys).toFixed(3);
+}
+
+// ─── Plot update ──────────────────────────────────────────────────────────────
+function updatePlot() {
+    const xs = makeX(freq);
+    const ys = compositeY(xs, freq, amp, phase);
+    Plotly.update('plot', { x: [xs], y: [ys] }, {}, [0]);
+    Plotly.react('spectrum', spectrumData(), specLayout, { responsive: true, displayModeBar: false });
+    updateInfo(ys);
+}
+
+// ─── Audio ────────────────────────────────────────────────────────────────────
+function startAudio() {
+    audioCtx  = new (window.AudioContext || window.webkitAudioContext)();
+    masterGain = audioCtx.createGain();
+    masterGain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+    masterGain.connect(audioCtx.destination);
+
+    oscillators = [];
+    gainNodes   = [];
+
+    harmonics.forEach((w, i) => {
+        const osc = audioCtx.createOscillator();
+        const g   = audioCtx.createGain();
+        osc.type = waveType;
+        osc.frequency.setValueAtTime(audioFreq * (i + 1), audioCtx.currentTime);
+        const total = harmonics.reduce((s, v) => s + Math.abs(v), 0) || 1;
+        g.gain.setValueAtTime((w / total) * amp, audioCtx.currentTime);
+        osc.connect(g);
+        g.connect(masterGain);
+        osc.start();
+        oscillators.push(osc);
+        gainNodes.push(g);
+    });
+
+    isPlaying = true;
+    updateAudioUI();
+}
+
+function stopAudio() {
+    oscillators.forEach(o => { try { o.stop(); o.disconnect(); } catch(e){} });
+    gainNodes.forEach(g => { try { g.disconnect(); } catch(e){} });
+    if (masterGain) { try { masterGain.disconnect(); } catch(e){} }
+    if (audioCtx)   { try { audioCtx.close(); } catch(e){} }
+    oscillators = []; gainNodes = []; masterGain = null; audioCtx = null;
+    isPlaying = false;
+    updateAudioUI();
+}
+
+function updateAudioParams() {
+    if (!isPlaying || oscillators.length === 0) return;
+    const now   = audioCtx.currentTime;
+    const total = harmonics.reduce((s, v) => s + Math.abs(v), 0) || 1;
+    oscillators.forEach((osc, i) => {
+        osc.type = waveType;
+        osc.frequency.setTargetAtTime(audioFreq * (i + 1), now, 0.02);
+        gainNodes[i].gain.setTargetAtTime((harmonics[i] / total) * amp, now, 0.02);
+    });
+}
+
+function updateAudioHarmonics() {
+    if (!isPlaying) return;
+    updateAudioParams();
+}
+
+function updateAudioUI() {
+    const btn = document.getElementById('toggle-btn');
+    const dot = document.getElementById('status-dot');
+    const txt = document.getElementById('status-text');
+    if (isPlaying) {
+        btn.innerHTML = '&#9632; Stop Audio';
+        btn.classList.add('playing');
+        dot.classList.remove('off');
+        txt.textContent = 'Audio playing';
+    } else {
+        btn.innerHTML = '&#9654; Start Audio';
+        btn.classList.remove('playing');
+        dot.classList.add('off');
+        txt.textContent = 'Audio off';
+    }
+}
+
+// ─── Waveform selector ────────────────────────────────────────────────────────
+document.querySelectorAll('.wave-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.wave-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        waveType = btn.dataset.wave;
+        updatePlot();
+        updateAudioParams();
+    });
+});
+
+// ─── Sliders ──────────────────────────────────────────────────────────────────
+document.getElementById('freq-slider').addEventListener('input', e => {
+    freq = parseFloat(e.target.value);
+    document.getElementById('freq-display').textContent = freq.toFixed(1) + ' Hz';
+    updatePlot();
+});
+
+document.getElementById('amp-slider').addEventListener('input', e => {
+    amp = parseFloat(e.target.value);
+    document.getElementById('amp-display').textContent = amp.toFixed(2);
+    updatePlot();
+    updateAudioParams();
+});
+
+document.getElementById('phase-slider').addEventListener('input', e => {
+    phase = parseFloat(e.target.value);
+    document.getElementById('phase-display').textContent = phase.toFixed(2) + ' rad';
+    updatePlot();
+});
+
+document.getElementById('audio-freq-slider').addEventListener('input', e => {
+    audioFreq = parseInt(e.target.value);
+    document.getElementById('audio-freq-display').textContent = audioFreq + ' Hz';
+    updateAudioParams();
+    // update note display
+    document.getElementById('note-val').textContent = freqToNote(audioFreq);
+});
+
+// ─── Buttons ──────────────────────────────────────────────────────────────────
+document.getElementById('toggle-btn').addEventListener('click', () => {
+    if (isPlaying) stopAudio(); else startAudio();
+});
+
+document.getElementById('reset-btn').addEventListener('click', () => {
+    freq = 1.0; amp = 1.0; phase = 0.0; audioFreq = 440; waveType = 'sine';
+    harmonics = [1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
+
+    document.getElementById('freq-slider').value  = '1.0';
+    document.getElementById('amp-slider').value   = '1.0';
+    document.getElementById('phase-slider').value = '0';
+    document.getElementById('audio-freq-slider').value = '440';
+    document.getElementById('freq-display').textContent  = '1.0 Hz';
+    document.getElementById('amp-display').textContent   = '1.00';
+    document.getElementById('phase-display').textContent = '0.00 rad';
+    document.getElementById('audio-freq-display').textContent = '440 Hz';
+
+    harmonics.forEach((v, i) => {
+        document.getElementById('h' + i + '-slider').value = v;
+        document.getElementById('h' + i + '-val').textContent = v.toFixed(2);
+    });
+
+    document.querySelectorAll('.wave-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.wave === 'sine');
+    });
+
+    updatePlot();
+    updateAudioParams();
+});
+
+document.getElementById('snapshot-btn').addEventListener('click', () => {
+    Plotly.downloadImage('plot', { format: 'png', filename: 'sine_snapshot', width: 860, height: 340 });
+});
+
+// ─── Visibility ───────────────────────────────────────────────────────────────
+document.addEventListener('visibilitychange', () => {
+    if (!isPlaying || !masterGain || !audioCtx) return;
+    if (document.hidden) {
+        masterGain.gain.setTargetAtTime(0, audioCtx.currentTime, 0.1);
+    } else {
+        masterGain.gain.setTargetAtTime(0.3, audioCtx.currentTime, 0.1);
+    }
+});
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+updatePlot();
+</script>
+</body>
+</html>

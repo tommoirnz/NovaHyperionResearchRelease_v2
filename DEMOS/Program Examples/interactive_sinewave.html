@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Sine Wave</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
+            color: #fff;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 8px;
+            background: linear-gradient(90deg, #a18cd1, #fbc2eb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 2px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #aaa;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+        .card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+        #plot { width: 100%; height: 420px; border-radius: 12px; overflow: hidden; }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+        .slider-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .slider-label {
+            min-width: 160px;
+            font-size: 0.95rem;
+            color: #ccc;
+        }
+        .slider-label span {
+            font-weight: bold;
+            color: #fbc2eb;
+            font-size: 1.1rem;
+        }
+        input[type=range] {
+            flex: 1;
+            -webkit-appearance: none;
+            height: 6px;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.2);
+            outline: none;
+            cursor: pointer;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+            cursor: pointer;
+            box-shadow: 0 0 8px rgba(161,140,209,0.8);
+        }
+        .range-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #888;
+            margin-top: 4px;
+            padding: 0 2px;
+        }
+
+        .audio-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 10px 28px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: all 0.2s ease;
+        }
+        #playBtn {
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+            color: #1a1a2e;
+        }
+        #playBtn:hover { transform: scale(1.05); box-shadow: 0 0 16px rgba(67,233,123,0.5); }
+        #stopBtn {
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            color: #1a1a2e;
+        }
+        #stopBtn:hover { transform: scale(1.05); box-shadow: 0 0 16px rgba(247,151,30,0.5); }
+        #stopBtn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #555;
+            display: inline-block;
+            margin-right: 6px;
+            transition: background 0.3s;
+        }
+        .status-dot.playing {
+            background: #43e97b;
+            box-shadow: 0 0 8px #43e97b;
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        .status-text { font-size: 0.9rem; color: #aaa; }
+
+        .volume-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .volume-icon { font-size: 1.2rem; }
+        .info-bar {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .info-item { }
+        .info-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(90deg, #a18cd1, #fbc2eb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .info-key { font-size: 0.75rem; color: #888; margin-top: 2px; }
+
+        /* Waveform type selector */
+        .wave-selector {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .wave-btn {
+            padding: 6px 18px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            background: rgba(255,255,255,0.05);
+            color: #ccc;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .wave-btn.active {
+            background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+            color: #1a1a2e;
+            font-weight: bold;
+            border-color: transparent;
+        }
+        .wave-btn:hover:not(.active) {
+            background: rgba(255,255,255,0.12);
+        }
+
+        /* Harmonics panel */
+        .harmonics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 12px;
+            margin-top: 10px;
+        }
+        .harmonic-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .harmonic-label {
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+        .harmonic-label span { color: #fbc2eb; font-weight: bold; }
+        input.h-slider {
+            width: 100%;
+            height: 4px;
+        }
+
+        /* Lissajous */
+        #lissajousPlot { width: 100%; height: 320px; border-radius: 12px; overflow: hidden; }
+        .liss-controls { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; margin-top: 12px; }
+        .liss-label { font-size: 0.85rem; color: #ccc; min-width: 140px; }
+        .liss-label span { color: #43e97b; font-weight: bold; }
+
+        /* Spectrum */
+        #spectrumPlot { width: 100%; height: 260px; border-radius: 12px; overflow: hidden; }
+
+        .section-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fbc2eb;
+            margin-bottom: 14px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>&#9835; Interactive Sine Wave Lab</h1>
+    <p class="subtitle">Visualise and hear waveforms - adjust frequency, amplitude, phase, harmonics and more</p>
+
+    <!-- Info Bar -->
+    <div class="card">
+        <div class="info-bar">
+            <div class="info-item">
+                <div class="info-value" id="infoFreq">1.0 Hz</div>
+                <div class="info-key">Frequency</div>
+            </div>
+            <div class="info-item">
+                <div class="info-value" id="infoPeriod">1.000 s</div>
+                <div class="info-key">Period</div>
+            </div>
+            <div class="info-item">
+                <div class="info-value" id="infoAmp">1.00</div>
+                <div class="info-key">Amplitude</div>
+            </div>
+            <div class="info-item">
+                <div class="info-value" id="infoWavelength">6.28</div>
+                <div class="info-key">Angular Freq (rad/s)</div>
+            </div>
+            <div class="info-item">
+                <div class="info-value" id="infoRMS">0.707</div>
+                <div class="info-key">RMS Value</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Waveform Type -->
+    <div class="card">
+        <div class="section-title">Waveform Type</div>
+        <div class="wave-selector">
+            <button class="wave-btn active" onclick="setWaveType('sine', this)">Sine</button>
+            <button class="wave-btn" onclick="setWaveType('square', this)">Square</button>
+            <button class="wave-btn" onclick="setWaveType('sawtooth', this)">Sawtooth</button>
+            <button class="wave-btn" onclick="setWaveType('triangle', this)">Triangle</button>
+        </div>
+    </div>
+
+    <!-- Main Plot -->
+    <div class="card">
+        <div class="section-title">Waveform</div>
+        <div id="plot"></div>
+    </div>
+
+    <!-- Controls -->
+    <div class="card controls">
+        <div class="section-title">Parameters</div>
+        <div>
+            <div class="slider-row">
+                <div class="slider-label">Frequency: <span id="freqVal">1.0</span> Hz</div>
+                <input type="range" id="freqSlider" min="1" max="2000" step="1" value="1">
+            </div>
+            <div class="range-labels"><span>1 Hz</span><span>500 Hz</span><span>1000 Hz</span><span>1500 Hz</span><span>2000 Hz</span></div>
+        </div>
+        <div>
+            <div class="slider-row">
+                <div class="slider-label">Amplitude: <span id="ampVal">1.00</span></div>
+                <input type="range" id="ampSlider" min="0.01" max="2" step="0.01" value="1">
+            </div>
+            <div class="range-labels"><span>0.01</span><span>0.5</span><span>1.0</span><span>1.5</span><span>2.0</span></div>
+        </div>
+        <div>
+            <div class="slider-row">
+                <div class="slider-label">Phase Shift: <span id="phaseVal">0.00</span> rad</div>
+                <input type="range" id="phaseSlider" min="0" max="6.2832" step="0.01" value="0">
+            </div>
+            <div class="range-labels"><span>0</span><span>&pi;/2</span><span>&pi;</span><span>3&pi;/2</span><span>2&pi;</span></div>
+        </div>
+        <div>
+            <div class="slider-row">
+                <div class="slider-label">DC Offset: <span id="dcVal">0.00</span></div>
+                <input type="range" id="dcSlider" min="-1" max="1" step="0.01" value="0">
+            </div>
+            <div class="range-labels"><span>-1</span><span>-0.5</span><span>0</span><span>0.5</span><span>1</span></div>
+        </div>
+    </div>
+
+    <!-- Harmonics -->
+    <div class="card">
+        <div class="section-title">Harmonic Synthesis (Fourier)</div>
+        <p style="font-size:0.8rem;color:#777;margin-bottom:12px;">
+            Add harmonics to the fundamental frequency. Drag sliders to set each harmonic amplitude.
+        </p>
+        <div class="harmonics-grid" id="harmonicsGrid"></div>
+        <div style="margin-top:14px;">
+            <div id="harmonicPlot" style="width:100%;height:280px;border-radius:12px;overflow:hidden;"></div>
+        </div>
+    </div>
+
+    <!-- Spectrum -->
+    <div class="card">
+        <div class="section-title">Frequency Spectrum</div>
+        <div id="spectrumPlot"></div>
+    </div>
+
+    <!-- Lissajous -->
+    <div class="card">
+        <div class="section-title">Lissajous Figure</div>
+        <p style="font-size:0.8rem;color:#777;margin-bottom:10px;">
+            X-axis: current waveform &nbsp;|&nbsp; Y-axis: second oscillator with independent controls
+        </p>
+        <div id="lissajousPlot"></div>
+        <div class="liss-controls">
+            <div>
+                <div class="liss-label">Y Frequency: <span id="lissFreqVal">1.0</span> Hz</div>
+                <input type="range" id="lissFreqSlider" min="1" max="2000" step="1" value="1" style="width:200px;">
+            </div>
+            <div>
+                <div class="liss-label">Y Phase: <span id="lissPhaseVal">0.00</span> rad</div>
+                <input type="range" id="lissPhaseSlider" min="0" max="6.2832" step="0.01" value="0" style="width:200px;">
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio -->
+    <div class="card">
+        <div class="section-title">Audio Playback</div>
+        <div class="audio-section">
+            <button class="btn" id="playBtn" onclick="startAudio()">&#9654; Play Tone</button>
+            <button class="btn" id="stopBtn" onclick="stopAudio()" disabled>&#9646;&#9646; Stop</button>
+            <div>
+                <span class="status-dot" id="statusDot"></span>
+                <span class="status-text" id="statusText">Audio stopped</span>
+            </div>
+            <div class="volume-row">
+                <span class="volume-icon">&#128264;</span>
+                <input type="range" id="volSlider" min="0" max="1" step="0.01" value="0.3" style="width:120px;">
+                <span id="volVal" style="font-size:0.85rem;color:#aaa;">30%</span>
+            </div>
+        </div>
+        <p style="margin-top:12px; font-size:0.8rem; color:#666;">
+            Note: The Web Audio API plays frequencies up to 20,000 Hz. The visual plot shows a representative waveform.
+            At very high frequencies the plot cycles are compressed - this is expected.
+        </p>
+    </div>
+</div>
+
+<script>
+// ─── State ───────────────────────────────────────────────────────────────────
+let freq     = 1.0;
+let amp      = 1.0;
+let phase    = 0.0;
+let dcOffset = 0.0;
+let waveType = 'sine';
+
+let lissFreq  = 1.0;
+let lissPhase = 0.0;
+
+let audioCtx   = null;
+let oscillator = null;
+let gainNode   = null;
+let isPlaying  = false;
+
+const N = 1000;
+const NUM_HARMONICS = 8;
+let harmonicAmps = new Array(NUM_HARMONICS).fill(0);
+
+// ─── Waveform generators ─────────────────────────────────────────────────────
+function sineVal(t, f, ph)     { return Math.sin(2 * Math.PI * f * t + ph); }
+function squareVal(t, f, ph)   { return Math.sign(Math.sin(2 * Math.PI * f * t + ph)); }
+function sawtoothVal(t, f, ph) {
+    const p = 1 / f;
+    const tp = ((t + ph / (2 * Math.PI * f)) % p + p) % p;
+    return 2 * (tp / p) - 1;
+}
+function triangleVal(t, f, ph) {
+    const p = 1 / f;
+    const tp = ((t + ph / (2 * Math.PI * f)) % p + p) % p;
+    return 1 - 4 * Math.abs(tp / p - 0.5);
+}
+
+function waveVal(t, f, ph) {
+    switch (waveType) {
+        case 'square':   return squareVal(t, f, ph);
+        case 'sawtooth': return sawtoothVal(t, f, ph);
+        case 'triangle': return triangleVal(t, f, ph);
+        default:         return sineVal(t, f, ph);
+    }
+}
+
+// ─── Data generation ─────────────────────────────────────────────────────────
+function generateData(f, a, ph, dc) {
+    const cycles   = Math.min(5, Math.max(1, f));
+    const duration = cycles / Math.max(f, 0.001);
+    const tArr = [], yArr = [];
+    for (let i = 0; i < N; i++) {
+        const t = (i / (N - 1)) * duration;
+        tArr.push(t);
+        yArr.push(a * waveVal(t, f, ph) + dc);
+    }
+    return { t: tArr, y: yArr, duration };
+}
+
+function generateHarmonicData(f, a, ph, dc) {
+    const cycles   = Math.min(5, Math.max(1, f));
+    const duration = cycles / Math.max(f, 0.001);
+    const tArr = [], yArr = [], fundArr = [];
+    for (let i = 0; i < N; i++) {
+        const t = (i / (N - 1)) * duration;
+        tArr.push(t);
+        let y = a * waveVal(t, f, ph) + dc;
+        for (let h = 0; h < NUM_HARMONICS; h++) {
+            y += harmonicAmps[h] * Math.sin(2 * Math.PI * f * (h + 2) * t);
+        }
+        yArr.push(y);
+        fundArr.push(a * waveVal(t, f, ph) + dc);
+    }
+    return { t: tArr, y: yArr, fund: fundArr };
+}
+
+function generateLissajous(f1, ph1, f2, ph2, a) {
+    const xArr = [], yArr = [];
+    const pts = 2000;
+    const dur = 10 / Math.min(f1, f2);
+    for (let i = 0; i < pts; i++) {
+        const t = (i / (pts - 1)) * dur;
+        xArr.push(a * waveVal(t, f1, ph1));
+        yArr.push(a * sineVal(t, f2, ph2));
+    }
+    return { x: xArr, y: yArr };
+}
+
+// ─── Plot: Main Waveform ─────────────────────────────────────────────────────
+function buildPlot() {
+    const { t, y } = generateData(freq, amp, phase, dcOffset);
+    const trace = {
+        x: t, y: y,
+        mode: 'lines',
+        line: { color: '#a18cd1', width: 2.5, shape: 'spline' },
+        fill: 'tozeroy',
+        fillcolor: 'rgba(161,140,209,0.12)',
+        name: waveType
+    };
+    const layout = getMainLayout();
+    Plotly.newPlot('plot', [trace], layout, { responsive: true, displayModeBar: false });
+}
+
+function updatePlot() {
+    const { t, y } = generateData(freq, amp, phase, dcOffset);
+    Plotly.react('plot',
+        [{ x: t, y: y, mode: 'lines',
+           line: { color: '#a18cd1', width: 2.5, shape: 'spline' },
+           fill: 'tozeroy', fillcolor: 'rgba(161,140,209,0.12)' }],
+        getMainLayout(),
+        { responsive: true, displayModeBar: false }
+    );
+    updateInfoBar();
+    updateHarmonicPlot();
+    updateSpectrumPlot();
+    updateLissajous();
+}
+
+function getMainLayout() {
+    return {
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor:  'rgba(0,0,0,0)',
+        font: { color: '#ccc', family: 'Segoe UI' },
+        xaxis: {
+            title: 'Time (s)',
+            gridcolor: 'rgba(255,255,255,0.08)',
+            zerolinecolor: 'rgba(255,255,255,0.2)',
+            color: '#aaa'
+        },
+        yaxis: {
+            title: 'Amplitude',
+            range: [-2.5, 2.5],
+            gridcolor: 'rgba(255,255,255,0.08)',
+            zerolinecolor: 'rgba(255,255,255,0.2)',
+            color: '#aaa'
+        },
+        margin: { l: 60, r: 20, t: 50, b: 60 },
+        showlegend: false,
+        title: {
+            text: `y = ${amp.toFixed(2)} · ${waveType}(2π · ${freq >= 1000 ? (freq/1000).toFixed(2)+'k' : freq.toFixed(1)} · t + ${phase.toFixed(2)}) + ${dcOffset.toFixed(2)}`,
+            font: { size: 13, color: '#fbc2eb' },
+            x: 0.5
+        }
+    };
+}
+
+// ─── Plot: Harmonics ─────────────────────────────────────────────────────────
+function buildHarmonicPlot() {
+    const { t, y, fund } = generateHarmonicData(freq, amp, phase, dcOffset);
+    Plotly.newPlot('harmonicPlot', [
+        { x: t, y: fund, mode: 'lines', name: 'Fundamental',
+          line: { color: 'rgba(161,140,209,0.5)', width: 1.5, dash: 'dot' } },
+        { x: t, y: y, mode: 'lines', name: 'Composite',
+          line: { color: '#fbc2eb', width: 2.5 },
+          fill: 'tozeroy', fillcolor: 'rgba(251,194,235,0.08)' }
+    ], {
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor:  'rgba(0,0,0,0)',
+        font: { color: '#ccc', family: 'Segoe UI' },
+        xaxis: { title: 'Time (s)', gridcolor: 'rgba(255,255,255,0.08)', color: '#aaa', zerolinecolor: 'rgba(255,255,255,0.2)' },
+        yaxis: { title: 'Amplitude', gridcolor: 'rgba(255,255,255,0.08)', color: '#aaa', zerolinecolor: 'rgba(255,255,255,0.2)' },
+        margin: { l: 60, r: 20, t: 20, b: 50 },
+        legend: { font: { color: '#aaa' }, bgcolor: 'rgba(0,0,0,0)' }
+    }, { responsive: true, displayModeBar: false });
+}
+
+function updateHarmonicPlot() {
+    const { t, y, fund } = generateHarmonicData(freq, amp, phase, dcOffset);
+    Plotly.react('harmonicPlot', [
+        { x: t, y: fund, mode: 'lines', name: 'Fundamental',
+          line: { color: 'rgba(161,140,209,0.5)', width: 1.5, dash: 'dot' } },
+        { x: t, y: y, mode: 'lines', name: 'Composite',
+          line: { color: '#fbc2eb', width: 2.5 },
+          fill: 'tozeroy', fillcolor: 'rgba(251,194,235,0.08)' }
+    ], {
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor:  'rgba(0,0,0,0)',
+        font: { color: '#ccc', family: 'Segoe UI' },
+        xaxis: { title: 'Time (s)', gridcolor: 'rgba(255,255,255,0.08)', color: '#aaa', zerolinecolor: 'rgba(255,255,255,0.2)' },
+        yaxis: { title: 'Amplitude', gridcolor: 'rgba(255,255,255,0.08)', color: '#aaa', zerolinecolor: 'rgba(255,255,255,0.2)' },
+        margin: { l: 60, r: 20, t: 20, b: 50 },
+        legend: { font: { color: '#aaa' }, bgcolor: 'rgba(0,0,0,0)' }
+    }, { responsive: true, displayModeBar: false });
+}
+
+// ─── Plot: Spectrum ──────────────────────────────────────────────────────────
+function buildSpectrumPlot() {
+    const { freqs, amps } = getSpectrumData();
+    Plotly.newPlot('spectrumPlot', [
+        { x: freqs, y: amps, type: 'bar',
+          marker: { color: freqs.map((_, i) => i === 0 ? '#a18cd1' : '#fbc2eb'),
+                    opacity: 0.85 },
+          name: 'Spectrum' }
+    ], {
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor:  'rgba(0,0,0,0)',
+        font: { color: '#ccc', family: 'Segoe UI' },
+        xaxis: { title: 'Frequency (Hz)', gridcolor: 'rgba(255,255,255,0.08)', color: '#aaa', type: 'log' },
+        yaxis: { title: 'Amplitude', gridcolor: 'rgba(255,255,255,0.08)', color: '#aaa', rangemode: 'tozero' },
+        margin: { l: 60, r: 20, t: 20, b: 60 },
+        showlegend: false,
+        bargap: 0.3
+    }, { responsive: true, displayModeBar: false });
+}
+
+function updateSpectrumPlot() {
+    const { freqs, amps } = getSpectrumData();
+    Plotly.react('spectrumPlot', [
+        { x: freqs, y: amps, type: 'bar',
+          marker: { color: freqs.map((_, i) => i === 0 ? '#a18cd1' : '#fbc2eb'), opacity: 0.85 } }
+    ], {
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor:  'rgba(0,0,0,0)',
+        font: { color: '#ccc', family: 'Segoe UI' },
+        xaxis: { title: 'Frequency (Hz)', gridcolor: 'rgba(255,255,255,0.08)', color: '#aaa', type: 'log' },
+        yaxis: { title: 'Amplitude', gridcolor: 'rgba(255,255,255,0.08)', color: '#aaa', rangemode: 'tozero' },
+        margin: { l: 60, r: 20, t: 20, b: 60 },
+        showlegend: false,
+        bargap: 0.3
+    }, { responsive: true, displayModeBar: false });
+}
+
+function getSpectrumData() {
+    const freqs = [freq];
+    const amps  = [amp];
+    for (let h = 0; h < NUM_HARMONICS; h++) {
+        if (harmonicAmps[h] > 0.001) {
+            freqs.push(freq * (h + 2));
+            amps.push(harmonicAmps[h]);
+        }
+    }
+    return { freqs, amps };
+}
+
+// ─── Plot: Lissajous ─────────────────────────────────────────────────────────
+function buildLissajous() {
+    const { x, y } = generateLissajous(freq, phase, lissFreq, lissPhase, amp);
+    Plotly.newPlot('lissajousPlot', [
+        { x, y, mode: 'lines',
+          line: { color: '#43e97b', width: 1.5 },
+          fill: 'none' }
+    ], {
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor:  'rgba(0,0,0,0)',
+        font: { color: '#ccc', family: 'Segoe UI' },
+        xaxis: { title: 'X (primary)', gridcolor: 'rgba(255,255,255,0.08)', color: '#aaa', zerolinecolor: 'rgba(255,255,255,0.2)', scaleanchor: 'y' },
+        yaxis: { title: 'Y (secondary)', gridcolor: 'rgba(255,255,255,0.08)', color: '#aaa', zerolinecolor: 'rgba(255,255,255,0.2)' },
+        margin: { l: 60, r: 20, t: 20, b: 60 },
+        showlegend: false
+    }, { responsive: true, displayModeBar: false });
+}
+
+function updateLissajous() {
+    const { x, y } = generateLissajous(freq, phase, lissFreq, lissPhase, amp);
+    Plotly.react('lissajousPlot', [
+        { x, y, mode: 'lines', line: { color: '#43e97b', width: 1.5 } }
+    ], {
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor:  'rgba(0,0,0,0)',
+        font: { color: '#ccc', family: 'Segoe UI' },
+        xaxis: { title: 'X (primary)', gridcolor: 'rgba(255,255,255,0.08)', color: '#aaa', zerolinecolor: 'rgba(255,255,255,0.2)', scaleanchor: 'y' },
+        yaxis: { title: 'Y (secondary)', gridcolor: 'rgba(255,255,255,0.08)', color: '#aaa', zerolinecolor: 'rgba(255,255,255,0.2)' },
+        margin: { l: 60, r: 20, t: 20, b: 60 },
+        showlegend: false
+    }, { responsive: true, displayModeBar: false });
+}
+
+// ─── Info Bar ────────────────────────────────────────────────────────────────
+function updateInfoBar() {
+    document.getElementById('infoFreq').textContent =
+        freq >= 1000 ? (freq/1000).toFixed(2) + ' kHz' : freq.toFixed(1) + ' Hz';
+    document.getElementById('infoPeriod').textContent   = (1/freq).toExponential(3) + ' s';
+    document.getElementById('infoAmp').textContent      = amp.toFixed(2);
+    document.getElementById('infoWavelength').textContent = (2 * Math.PI * freq).toFixed(2);
+    // RMS: sine=amp/sqrt(2), square=amp, triangle=amp/sqrt(3), sawtooth=amp/sqrt(3)
+    const rmsMap = { sine: amp/Math.sqrt(2), square: amp, triangle: amp/Math.sqrt(3), sawtooth: amp/Math.sqrt(3) };
+    document.getElementById('infoRMS').textContent = rmsMap[waveType].toFixed(3);
+}
+
+// ─── Waveform type ───────────────────────────────────────────────────────────
+function setWaveType(type, btn) {
+    waveType = type;
+    document.querySelectorAll('.wave-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    updatePlot();
+    if (isPlaying) {
+        oscillator.type = type === 'sine' ? 'sine'
+                        : type === 'square' ? 'square'
+                        : type === 'sawtooth' ? 'sawtooth'
+                        : 'triangle';
+    }
+}
+
+// ─── Harmonics UI ────────────────────────────────────────────────────────────
+function buildHarmonicsGrid() {
+    const grid = document.getElementById('harmonicsGrid');
+    grid.innerHTML = '';
+    for (let h = 0; h < NUM_HARMONICS; h++) {
+        const n = h + 2;
+        const div = document.createElement('div');
+        div.className = 'harmonic-item';
+        div.innerHTML = `
+            <div class="harmonic-label">H${n} (${n}f): <span id="hVal${h}">0.00</span></div>
+            <input type="range" class="h-slider" id="hSlider${h}"
+                   min="0" max="1" step="0.01" value="0">
+        `;
+        grid.appendChild(div);
+    }
+    for (let h = 0; h < NUM_HARMONICS; h++) {
+        document.getElementById('hSlider' + h).addEventListener('input', function() {
+            harmonicAmps[h] = parseFloat(this.value);
+            document.getElementById('hVal' + h).textContent = harmonicAmps[h].toFixed(2);
+            updateHarmonicPlot();
+            updateSpectrumPlot();
+        });
+    }
+}
+
+// ─── Sliders ─────────────────────────────────────────────────────────────────
+document.getElementById('freqSlider').addEventListener('input', function() {
+    freq = parseFloat(this.value);
+    document.getElementById('freqVal').textContent =
+        freq >= 1000 ? (freq/1000).toFixed(2) + 'k' : freq.toFixed(1);
+    updatePlot();
+    if (isPlaying) oscillator.frequency.setTargetAtTime(freq, audioCtx.currentTime, 0.01);
+});
+
+document.getElementById('ampSlider').addEventListener('input', function() {
+    amp = parseFloat(this.value);
+    document.getElementById('ampVal').textContent = amp.toFixed(2);
+    updatePlot();
+    if (isPlaying) gainNode.gain.setTargetAtTime(
+        amp * parseFloat(document.getElementById('volSlider').value),
+        audioCtx.currentTime, 0.01
+    );
+});
+
+document.getElementById('phaseSlider').addEventListener('input', function() {
+    phase = parseFloat(this.value);
+    document.getElementById('phaseVal').textContent = phase.toFixed(2);
+    updatePlot();
+});
+
+document.getElementById('dcSlider').addEventListener('input', function() {
+    dcOffset = parseFloat(this.value);
+    document.getElementById('dcVal').textContent = dcOffset.toFixed(2);
+    updatePlot();
+});
+
+document.getElementById('volSlider').addEventListener('input', function() {
+    const vol = parseFloat(this.value);
+    document.getElementById('volVal').textContent = Math.round(vol * 100) + '%';
+    if (isPlaying) gainNode.gain.setTargetAtTime(amp * vol, audioCtx.currentTime, 0.01);
+});
+
+document.getElementById('lissFreqSlider').addEventListener('input', function() {
+    lissFreq = parseFloat(this.value);
+    document.getElementById('lissFreqVal').textContent =
+        lissFreq >= 1000 ? (lissFreq/1000).toFixed(2) + 'k' : lissFreq.toFixed(1);
+    updateLissajous();
+});
+
+document.getElementById('lissPhaseSlider').addEventListener('input', function() {
+    lissPhase = parseFloat(this.value);
+    document.getElementById('lissPhaseVal').textContent = lissPhase.toFixed(2);
+    updateLissajous();
+});
+
+// ─── Audio ───────────────────────────────────────────────────────────────────
+function startAudio() {
+    if (isPlaying) return;
+    audioCtx   = new (window.AudioContext || window.webkitAudioContext)();
+    oscillator = audioCtx.createOscillator();
+    gainNode   = audioCtx.createGain();
+
+    oscillator.type = waveType === 'sine' ? 'sine'
+                    : waveType === 'square' ? 'square'
+                    : waveType === 'sawtooth' ? 'sawtooth'
+                    : 'triangle';
+    oscillator.frequency.value = freq;
+    const vol = parseFloat(document.getElementById('volSlider').value);
+    gainNode.gain.value = amp * vol;
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    oscillator.start();
+    isPlaying = true;
+
+    document.getElementById('playBtn').disabled = true;
+    document.getElementById('stopBtn').disabled = false;
+    document.getElementById('statusDot').classList.add('playing');
+    document.getElementById('statusText').textContent =
+        'Playing ' + waveType + ' at ' + freq.toFixed(1) + ' Hz';
+}
+
+function stopAudio() {
+    if (!isPlaying) return;
+    gainNode.gain.setTargetAtTime(0, audioCtx.currentTime, 0.05);
+    setTimeout(() => {
+        oscillator.stop();
+        audioCtx.close();
+        isPlaying = false;
+        document.getElementById('playBtn').disabled = false;
+        document.getElementById('stopBtn').disabled = true;
+        document.getElementById('statusDot').classList.remove('playing');
+        document.getElementById('statusText').textContent = 'Audio stopped';
+    }, 200);
+}
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+buildHarmonicsGrid();
+buildPlot();
+buildHarmonicPlot();
+buildSpectrumPlot();
+buildLissajous();
+updateInfoBar();
+</script>
+</body>
+</html>

@@ -1,0 +1,299 @@
+<svg width="100%" viewBox="0 0 740 1120" role="img" xmlns="http://www.w3.org/2000/svg">
+<title>Nova Hyperion Research Engine — Autonomous Pipeline</title>
+<desc>Two-column pipeline diagram showing the Chemistry Researcher (left) and Math Researcher (right) autonomous loops, both feeding into shared journal stores, ResearchWatcher, and final outputs of TTS, HTML report, email, and Nova query tool.</desc>
+
+<defs>
+  <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+</defs>
+
+<!-- ── background ── -->
+<rect width="740" height="1120" fill="rgb(4,8,15)"/>
+
+<!-- ════════════════════════════════════════════════════════════
+     TITLE BAR
+     ════════════════════════════════════════════════════════════ -->
+<rect x="0" y="0" width="740" height="52" fill="rgb(10,16,28)"/>
+<text x="370" y="20" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(200,198,188);font-size:13px;font-weight:700;letter-spacing:3px;font-family:Segoe UI,sans-serif;">
+  🔬  NOVA HYPERION  ·  AUTONOMOUS RESEARCH ENGINE
+</text>
+<text x="370" y="38" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(100,98,90);font-size:11px;font-family:Segoe UI,sans-serif;">
+  Background loops running continuously alongside Nova Assistant
+</text>
+
+<!-- ════════════════════════════════════════════════════════════
+     COLUMN HEADERS
+     ════════════════════════════════════════════════════════════ -->
+
+<!-- Chemistry header -->
+<rect x="20" y="62" width="330" height="46" rx="8" fill="rgb(5,58,40)" stroke="rgb(75,190,135)" stroke-width="0.8"/>
+<text x="185" y="79" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(148,225,188);font-size:14px;font-weight:700;font-family:Segoe UI,sans-serif;">
+  🧬  Chemistry Researcher
+</text>
+<text x="185" y="97" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(75,190,135);font-size:11px;font-family:Segoe UI,sans-serif;">
+  nova_chemistry_researcher.py
+</text>
+
+<!-- Math header -->
+<rect x="390" y="62" width="330" height="46" rx="8" fill="rgb(38,28,72)" stroke="rgb(140,120,210)" stroke-width="0.8"/>
+<text x="555" y="79" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(192,178,238);font-size:14px;font-weight:700;font-family:Segoe UI,sans-serif;">
+  🔢  Math Researcher
+</text>
+<text x="555" y="97" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(140,120,210);font-size:11px;font-family:Segoe UI,sans-serif;">
+  nova_math_researcher.py
+</text>
+
+<!-- arrows from headers -->
+<line x1="185" y1="108" x2="185" y2="120" marker-end="url(#arr)" stroke="rgb(75,190,135)" stroke-width="1.5" fill="none"/>
+<line x1="555" y1="108" x2="555" y2="120" marker-end="url(#arr)" stroke="rgb(140,120,210)" stroke-width="1.5" fill="none"/>
+
+<!-- ════════════════════════════════════════════════════════════
+     CHEMISTRY STAGES  (left column, x: 20–350, centre 185)
+     ════════════════════════════════════════════════════════════ -->
+
+<!-- Stage 1 -->
+<rect x="20" y="120" width="330" height="42" rx="6" fill="rgb(5,58,40)" stroke="rgb(75,190,135)" stroke-width="0.6"/>
+<text x="185" y="135" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(148,225,188);font-size:13px;font-weight:500;font-family:Segoe UI,sans-serif;">Ollama · hypothesis generation</text>
+<text x="185" y="152" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(75,190,135);font-size:11px;font-family:Segoe UI,sans-serif;">qwen3-coder:30b · SMILES + target + mechanism</text>
+<line x1="185" y1="162" x2="185" y2="174" marker-end="url(#arr)" stroke="rgb(75,190,135)" stroke-width="1.5" fill="none"/>
+
+<!-- Stage 2 -->
+<rect x="20" y="174" width="330" height="42" rx="6" fill="rgb(5,58,40)" stroke="rgb(75,190,135)" stroke-width="0.6"/>
+<text x="185" y="189" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(148,225,188);font-size:13px;font-weight:500;font-family:Segoe UI,sans-serif;">RDKit · structural validation</text>
+<text x="185" y="206" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(75,190,135);font-size:11px;font-family:Segoe UI,sans-serif;">Lipinski · scaffold SMARTS · PAINS filter</text>
+<line x1="185" y1="216" x2="185" y2="228" marker-end="url(#arr)" stroke="rgb(75,190,135)" stroke-width="1.5" fill="none"/>
+
+<!-- Stage 3 -->
+<rect x="20" y="228" width="330" height="42" rx="6" fill="rgb(5,58,40)" stroke="rgb(75,190,135)" stroke-width="0.6"/>
+<text x="185" y="243" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(148,225,188);font-size:13px;font-weight:500;font-family:Segoe UI,sans-serif;">PubChem + ChEMBL · novelty check</text>
+<text x="185" y="260" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(75,190,135);font-size:11px;font-family:Segoe UI,sans-serif;">exact match · IUPAC rename · similarity search</text>
+<line x1="185" y1="270" x2="185" y2="282" marker-end="url(#arr)" stroke="rgb(75,190,135)" stroke-width="1.5" fill="none"/>
+
+<!-- Stage 4 -->
+<rect x="20" y="282" width="330" height="42" rx="6" fill="rgb(5,58,40)" stroke="rgb(75,190,135)" stroke-width="0.6"/>
+<text x="185" y="297" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(148,225,188);font-size:13px;font-weight:500;font-family:Segoe UI,sans-serif;">RDKit ADMET prediction</text>
+<text x="185" y="314" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(75,190,135);font-size:11px;font-family:Segoe UI,sans-serif;">GI absorption · BBB · solubility · CYP risk</text>
+<line x1="185" y1="324" x2="185" y2="336" marker-end="url(#arr)" stroke="rgb(75,190,135)" stroke-width="1.5" fill="none"/>
+
+<!-- Stage 5 -->
+<rect x="20" y="336" width="330" height="42" rx="6" fill="rgb(5,58,40)" stroke="rgb(75,190,135)" stroke-width="0.6"/>
+<text x="185" y="351" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(148,225,188);font-size:13px;font-weight:500;font-family:Segoe UI,sans-serif;">AutoDock Vina · molecular docking</text>
+<text x="185" y="368" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(75,190,135);font-size:11px;font-family:Segoe UI,sans-serif;">EGFR · BCL2 · CDK2 · PARP1 · pose quality check</text>
+<line x1="185" y1="378" x2="185" y2="390" marker-end="url(#arr)" stroke="rgb(235,148,30)" stroke-width="1.5" fill="none"/>
+
+<!-- Stage 6 — Claude escalation (amber) -->
+<rect x="20" y="390" width="330" height="42" rx="6" fill="rgb(88,48,0)" stroke="rgb(232,145,28)" stroke-width="0.8"/>
+<text x="185" y="405" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(250,198,115);font-size:13px;font-weight:600;font-family:Segoe UI,sans-serif;">Claude · oncology analysis  ★ escalated</text>
+<text x="185" y="422" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(232,145,28);font-size:11px;font-family:Segoe UI,sans-serif;">mechanism · SAR · docking · verdict · dev path</text>
+<line x1="185" y1="432" x2="185" y2="444" marker-end="url(#arr)" stroke="rgb(75,190,135)" stroke-width="1.5" fill="none"/>
+
+<!-- Stage 7 -->
+<rect x="20" y="444" width="330" height="42" rx="6" fill="rgb(5,58,40)" stroke="rgb(75,190,135)" stroke-width="0.6"/>
+<text x="185" y="459" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(148,225,188);font-size:13px;font-weight:500;font-family:Segoe UI,sans-serif;">HTML report · dark-theme render</text>
+<text x="185" y="476" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(75,190,135);font-size:11px;font-family:Segoe UI,sans-serif;">docking tables · scaffold badge · full analysis</text>
+<line x1="185" y1="486" x2="185" y2="498" marker-end="url(#arr)" stroke="rgb(75,190,135)" stroke-width="1.5" fill="none"/>
+
+<!-- Stage 8 -->
+<rect x="20" y="498" width="330" height="42" rx="6" fill="rgb(5,58,40)" stroke="rgb(75,190,135)" stroke-width="0.6"/>
+<text x="185" y="513" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(148,225,188);font-size:13px;font-weight:500;font-family:Segoe UI,sans-serif;">chemistry_alert.json · write alert</text>
+<text x="185" y="530" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(75,190,135);font-size:11px;font-family:Segoe UI,sans-serif;">dock_best · compound · status · report path</text>
+
+<!-- ════════════════════════════════════════════════════════════
+     MATH STAGES  (right column, x: 390–720, centre 555)
+     ════════════════════════════════════════════════════════════ -->
+
+<!-- Stage 1 -->
+<rect x="390" y="120" width="330" height="42" rx="6" fill="rgb(38,28,72)" stroke="rgb(140,120,210)" stroke-width="0.6"/>
+<text x="555" y="135" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(192,178,238);font-size:13px;font-weight:500;font-family:Segoe UI,sans-serif;">Ollama · conjecture generation</text>
+<text x="555" y="152" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(140,120,210);font-size:11px;font-family:Segoe UI,sans-serif;">qwen3-coder:30b · domain · test range</text>
+<line x1="555" y1="162" x2="555" y2="174" marker-end="url(#arr)" stroke="rgb(140,120,210)" stroke-width="1.5" fill="none"/>
+
+<!-- Stage 2 -->
+<rect x="390" y="174" width="330" height="42" rx="6" fill="rgb(38,28,72)" stroke="rgb(140,120,210)" stroke-width="0.6"/>
+<text x="555" y="189" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(192,178,238);font-size:13px;font-weight:500;font-family:Segoe UI,sans-serif;">sympy + mpmath · numerical verification</text>
+<text x="555" y="206" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(140,120,210);font-size:11px;font-family:Segoe UI,sans-serif;">≥100 consecutive cases · no counterexample</text>
+<line x1="555" y1="216" x2="555" y2="228" marker-end="url(#arr)" stroke="rgb(140,120,210)" stroke-width="1.5" fill="none"/>
+
+<!-- Stage 3 -->
+<rect x="390" y="228" width="330" height="42" rx="6" fill="rgb(38,28,72)" stroke="rgb(140,120,210)" stroke-width="0.6"/>
+<text x="555" y="243" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(192,178,238);font-size:13px;font-weight:500;font-family:Segoe UI,sans-serif;">arXiv + OEIS · novelty check</text>
+<text x="555" y="260" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(140,120,210);font-size:11px;font-family:Segoe UI,sans-serif;">prior theorem search · duplicate detection</text>
+<line x1="555" y1="270" x2="555" y2="282" marker-end="url(#arr)" stroke="rgb(235,148,30)" stroke-width="1.5" fill="none"/>
+
+<!-- Stage 4 — Claude escalation (amber) -->
+<rect x="390" y="282" width="330" height="42" rx="6" fill="rgb(88,48,0)" stroke="rgb(232,145,28)" stroke-width="0.8"/>
+<text x="555" y="297" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(250,198,115);font-size:13px;font-weight:600;font-family:Segoe UI,sans-serif;">Claude · proof attempt  ★ escalated</text>
+<text x="555" y="314" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(232,145,28);font-size:11px;font-family:Segoe UI,sans-serif;">informal proof sketch · confidence verdict</text>
+<line x1="555" y1="324" x2="555" y2="336" marker-end="url(#arr)" stroke="rgb(140,120,210)" stroke-width="1.5" fill="none"/>
+
+<!-- Stage 5 -->
+<rect x="390" y="336" width="330" height="42" rx="6" fill="rgb(38,28,72)" stroke="rgb(140,120,210)" stroke-width="0.6"/>
+<text x="555" y="351" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(192,178,238);font-size:13px;font-weight:500;font-family:Segoe UI,sans-serif;">HTML report · MathJax rendering</text>
+<text x="555" y="368" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(140,120,210);font-size:11px;font-family:Segoe UI,sans-serif;">equations · proof sketch · evidence count</text>
+<line x1="555" y1="378" x2="555" y2="390" marker-end="url(#arr)" stroke="rgb(140,120,210)" stroke-width="1.5" fill="none"/>
+
+<!-- Stage 6 -->
+<rect x="390" y="390" width="330" height="42" rx="6" fill="rgb(38,28,72)" stroke="rgb(140,120,210)" stroke-width="0.6"/>
+<text x="555" y="405" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(192,178,238);font-size:13px;font-weight:500;font-family:Segoe UI,sans-serif;">research_alert.json · write alert</text>
+<text x="555" y="422" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(140,120,210);font-size:11px;font-family:Segoe UI,sans-serif;">status · conjecture · cases · timestamp</text>
+
+<!-- ── spacer note (math column shorter by design) ── -->
+<text x="555" y="475" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(60,50,100);font-size:10.5px;font-style:italic;font-family:Segoe UI,sans-serif;">Fewer stages than chemistry —</text>
+<text x="555" y="490" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(60,50,100);font-size:10.5px;font-style:italic;font-family:Segoe UI,sans-serif;">no docking or ADMET required</text>
+
+<!-- ════════════════════════════════════════════════════════════
+     GATHER LINES  (both columns converge at y=570)
+     ════════════════════════════════════════════════════════════ -->
+<line x1="185" y1="540" x2="185" y2="570" stroke="rgb(130,128,118)" stroke-width="1.2" fill="none"/>
+<line x1="555" y1="432" x2="555" y2="570" stroke="rgb(130,128,118)" stroke-width="1.2" fill="none"/>
+<line x1="185" y1="570" x2="555" y2="570" stroke="rgb(130,128,118)" stroke-width="1.2" fill="none"/>
+<line x1="370" y1="570" x2="370" y2="584" marker-end="url(#arr)" stroke="rgb(130,128,118)" stroke-width="1.5" fill="none"/>
+
+<!-- ════════════════════════════════════════════════════════════
+     JOURNAL BOXES
+     ════════════════════════════════════════════════════════════ -->
+<rect x="30" y="584" width="320" height="44" rx="6" fill="rgb(75,18,5)" stroke="rgb(215,95,65)" stroke-width="0.7"/>
+<text x="190" y="600" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(245,180,160);font-size:13px;font-weight:500;font-family:Segoe UI,sans-serif;">chemistry_journal.json</text>
+<text x="190" y="618" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(215,95,65);font-size:11px;font-family:Segoe UI,sans-serif;">findings · scores · SMILES · analysis</text>
+
+<rect x="390" y="584" width="320" height="44" rx="6" fill="rgb(75,18,5)" stroke="rgb(215,95,65)" stroke-width="0.7"/>
+<text x="550" y="600" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(245,180,160);font-size:13px;font-weight:500;font-family:Segoe UI,sans-serif;">research_journal.json</text>
+<text x="550" y="618" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(215,95,65);font-size:11px;font-family:Segoe UI,sans-serif;">conjectures · cases · proof attempts</text>
+
+<!-- gather to ResearchWatcher -->
+<line x1="190" y1="628" x2="190" y2="648" stroke="rgb(130,128,118)" stroke-width="1.2" fill="none"/>
+<line x1="550" y1="628" x2="550" y2="648" stroke="rgb(130,128,118)" stroke-width="1.2" fill="none"/>
+<line x1="190" y1="648" x2="550" y2="648" stroke="rgb(130,128,118)" stroke-width="1.2" fill="none"/>
+<line x1="370" y1="648" x2="370" y2="662" marker-end="url(#arr)" stroke="rgb(130,128,118)" stroke-width="1.5" fill="none"/>
+
+<!-- ════════════════════════════════════════════════════════════
+     RESEARCHWATCHER
+     ════════════════════════════════════════════════════════════ -->
+<rect x="160" y="662" width="420" height="48" rx="8" fill="rgb(50,40,115)" stroke="rgb(158,150,224)" stroke-width="0.8"/>
+<text x="370" y="680" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(204,200,244);font-size:14px;font-weight:600;font-family:Segoe UI,sans-serif;">ResearchWatcher</text>
+<text x="370" y="698" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(158,150,224);font-size:11.5px;font-family:Segoe UI,sans-serif;">nova_research_hooks.py · polls alert files every 30s</text>
+
+<!-- fan from ResearchWatcher to 4 outputs -->
+<line x1="370" y1="710" x2="370" y2="728" stroke="rgb(130,128,118)" stroke-width="1.2" fill="none"/>
+<line x1="110" y1="728" x2="630" y2="728" stroke="rgb(130,128,118)" stroke-width="1.2" fill="none"/>
+<line x1="110" y1="728" x2="110" y2="742" marker-end="url(#arr)" stroke="rgb(130,128,118)" stroke-width="1.5" fill="none"/>
+<line x1="283" y1="728" x2="283" y2="742" marker-end="url(#arr)" stroke="rgb(130,128,118)" stroke-width="1.5" fill="none"/>
+<line x1="457" y1="728" x2="457" y2="742" marker-end="url(#arr)" stroke="rgb(130,128,118)" stroke-width="1.5" fill="none"/>
+<line x1="630" y1="728" x2="630" y2="742" marker-end="url(#arr)" stroke="rgb(130,128,118)" stroke-width="1.5" fill="none"/>
+
+<!-- ════════════════════════════════════════════════════════════
+     OUTPUT BOXES
+     ════════════════════════════════════════════════════════════ -->
+
+<!-- TTS -->
+<rect x="22" y="742" width="174" height="48" rx="6" fill="rgb(8,72,58)" stroke="rgb(82,190,150)" stroke-width="0.7"/>
+<text x="109" y="760" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(152,222,196);font-size:13px;font-weight:500;font-family:Segoe UI,sans-serif;">TTS spoken alert</text>
+<text x="109" y="778" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(82,190,150);font-size:11px;font-family:Segoe UI,sans-serif;">SAPI5 · Edge TTS</text>
+
+<!-- HTML Report -->
+<rect x="196" y="742" width="174" height="48" rx="6" fill="rgb(8,72,58)" stroke="rgb(82,190,150)" stroke-width="0.7"/>
+<text x="283" y="760" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(152,222,196);font-size:13px;font-weight:500;font-family:Segoe UI,sans-serif;">HTML report</text>
+<text x="283" y="778" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(82,190,150);font-size:11px;font-family:Segoe UI,sans-serif;">MathJax · docking tables</text>
+
+<!-- Email -->
+<rect x="370" y="742" width="174" height="48" rx="6" fill="rgb(8,72,58)" stroke="rgb(82,190,150)" stroke-width="0.7"/>
+<text x="457" y="760" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(152,222,196);font-size:13px;font-weight:500;font-family:Segoe UI,sans-serif;">Email alert</text>
+<text x="457" y="778" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(82,190,150);font-size:11px;font-family:Segoe UI,sans-serif;">Gmail SMTP · report link</text>
+
+<!-- Nova query tool -->
+<rect x="544" y="742" width="174" height="48" rx="6" fill="rgb(8,72,58)" stroke="rgb(82,190,150)" stroke-width="0.7"/>
+<text x="631" y="760" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(152,222,196);font-size:13px;font-weight:500;font-family:Segoe UI,sans-serif;">Nova query tool</text>
+<text x="631" y="778" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(82,190,150);font-size:11px;font-family:Segoe UI,sans-serif;">get_research_digest</text>
+
+<!-- ════════════════════════════════════════════════════════════
+     LEGEND
+     ════════════════════════════════════════════════════════════ -->
+<line x1="20" y1="818" x2="720" y2="818" stroke="rgb(30,30,40)" stroke-width="1"/>
+<text x="30" y="838" dominant-baseline="central"
+  style="fill:rgb(90,88,80);font-size:11px;font-family:Segoe UI,sans-serif;">Legend:</text>
+
+<rect x="80" y="828" width="14" height="14" rx="3" fill="rgb(5,58,40)" stroke="rgb(75,190,135)" stroke-width="0.6"/>
+<text x="100" y="836" dominant-baseline="central"
+  style="fill:rgb(90,88,80);font-size:11px;font-family:Segoe UI,sans-serif;">Chemistry stage (local · free)</text>
+
+<rect x="270" y="828" width="14" height="14" rx="3" fill="rgb(38,28,72)" stroke="rgb(140,120,210)" stroke-width="0.6"/>
+<text x="290" y="836" dominant-baseline="central"
+  style="fill:rgb(90,88,80);font-size:11px;font-family:Segoe UI,sans-serif;">Math stage (local · free)</text>
+
+<rect x="440" y="828" width="14" height="14" rx="3" fill="rgb(88,48,0)" stroke="rgb(232,145,28)" stroke-width="0.6"/>
+<text x="460" y="836" dominant-baseline="central"
+  style="fill:rgb(90,88,80);font-size:11px;font-family:Segoe UI,sans-serif;">Claude escalation (paid · survivors only)</text>
+
+<!-- ════════════════════════════════════════════════════════════
+     ESCALATION FUNNEL NOTE
+     ════════════════════════════════════════════════════════════ -->
+<rect x="20" y="860" width="700" height="72" rx="8" fill="rgb(10,14,22)" stroke="rgb(40,38,30)" stroke-width="0.8"/>
+<text x="370" y="878" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(160,158,148);font-size:11.5px;font-weight:600;font-family:Segoe UI,sans-serif;letter-spacing:1px;">ESCALATION FUNNEL  ·  Local-first · near-zero cost</text>
+<text x="50" y="900" dominant-baseline="central"
+  style="fill:rgb(80,78,68);font-size:10.5px;font-family:Segoe UI,sans-serif;">
+  Chemistry: ~50% pass SMILES → ~30% pass Lipinski → ~20% novel (PubChem) → ~10% pass docking → ~2% escalate to Claude
+</text>
+<text x="50" y="918" dominant-baseline="central"
+  style="fill:rgb(80,78,68);font-size:10.5px;font-family:Segoe UI,sans-serif;">
+  Math:  ~60% pass JSON parse → ~20% verified (≥100 cases, no counterexample) → ~10% novel (arXiv) → ~3% escalate to Claude
+</text>
+
+<!-- footer -->
+<text x="370" y="1105" text-anchor="middle" dominant-baseline="central"
+  style="fill:rgb(50,48,40);font-size:10px;font-family:Segoe UI,sans-serif;">
+  Nova Hyperion Research Engine · Dr Tom Moir · Birkdale, Auckland, NZ
+</text>
+
+</svg>
