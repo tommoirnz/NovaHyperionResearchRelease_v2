@@ -152,12 +152,37 @@ class NovaRouter:
             plot_keywords = ["plot", "graph", "chart"]
             is_tool_like = any(k in text for k in tool_keywords)
             is_plot = any(k in text for k in plot_keywords)
+
+            affirmatives = {"yes", "yeah", "yep", "ok", "okay", "sure", "go ahead", "do it", "please"}
+            if text.strip() in affirmatives:
+                last_task = self.state.get("last_task", "")
+                last_result = self.state.get("last_result", "")
+                if last_task:
+                    clean_last = re.sub(r'Content of "[^"]*":\s*```.*?```', '', last_task, flags=re.DOTALL).strip()
+                    clean_last = re.sub(r'\[IMAGE_FILE:[^\]]+\]', '', clean_last).strip()
+
+                    if clean_last.lower().startswith("describe everything") and last_result:
+                        # Ask the AI what "yes" means given what Nova just said
+                        intent = self.ai.generate(
+                            f"Nova just said this to the user:\n\n{last_result[-800:]}\n\n"
+                            f"The user replied 'yes'. In one short sentence (no more than 15 words), "
+                            f"what is the user agreeing to do? Start with a verb.",
+                            use_planning=False
+                        )
+                        user_input = f"Yes, please proceed: {intent.strip()}"
+                    elif clean_last:
+                        user_input = f"Yes, please proceed with: {clean_last}"
+                    else:
+                        user_input = "Yes, please proceed."
+
+                    text = user_input.lower()
+                    self.log(f"[AFFIRMATIVE] Expanded to: {user_input}")
+
             is_simple = (
                     len((user_input or "").split()) < 4 and
                     not any(k in text for k in info_keywords) and
                     not is_tool_like and not is_plot
             )
-
             internet_ctx = ""
             if not is_simple:
                 internet_ctx, _ = self._handle_internet_search_nonblocking(user_input, full_history_str)

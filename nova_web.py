@@ -379,9 +379,17 @@ class NovaWebHandler(http.server.SimpleHTTPRequestHandler):
                 img_path = match.group(1).strip()
                 if os.path.exists(img_path):
                     self.nova.log(f"[UPLOAD] Image file detected → vision: {img_path}")
-                    comment = msg.split('User comment:')[-1].strip() if 'User comment:' in msg else \
-                        'Describe everything you can see in this image in detail.'
+                    comment = msg.split('User comment:')[-1].strip() if 'User comment:' in msg else ''
                     clean_msg = comment or 'Describe everything you can see in this image in detail.'
+
+                    # ── PATCH: nudge Nova to offer to solve equations/problems ──
+                    if not comment:
+                        clean_msg = (
+                            'Describe everything you can see in this image in detail. '
+                            'If the image contains a mathematical equation, formula, physics problem, '
+                            'circuit diagram, or any technical problem, describe it clearly and offer '
+                            'to solve or analyse it.'
+                        )
                     self.nova._append_conv("user", clean_msg)
                     self.nova.conversation_history.append({"role": "user", "content": clean_msg})
                     self.nova._thinking = True
@@ -390,15 +398,17 @@ class NovaWebHandler(http.server.SimpleHTTPRequestHandler):
                         try:
                             self.nova.log(f"[VISION] model={self.nova.ai.model}, img={img_path}")
                             result = self.nova.ai.generate(clean_msg, image_path=img_path, use_planning=False)
-                            self.nova._deliver_tool_result(result or "No response from model.")
+                            reply = result or "No response from model."
+                            self.nova._append_conv("assistant", reply)
+                            self.nova.conversation_history.append({"role": "assistant", "content": reply})
+                            self.nova.state["last_task"] = clean_msg  # ← Fix 1
+                            self.nova._save_history(clean_msg, reply)
+                            self.nova._deliver_tool_result(reply)
                         except Exception as e:
                             self.nova.log(f"[VISION ERROR] {e}")
                             self.nova._deliver_tool_result(f"Vision error: {e}")
                         finally:
                             self.nova._thinking = False
-
-                    threading.Thread(target=_vision_task, daemon=True).start()
-                    return
 
         if "I've attached" in msg and "```" in msg:
             try:
@@ -453,15 +463,17 @@ class NovaWebHandler(http.server.SimpleHTTPRequestHandler):
                                               f"Approach this with maximum creativity.\n"
                                               f"User prompt: {comment}")
                             result = self.nova.ai.generate(imagine_prompt, image_path=img_path, use_planning=False)
-                            self.nova._deliver_tool_result(result or "No response.")
+                            reply = result or "No response."
+                            self.nova._append_conv("assistant", reply)
+                            self.nova.conversation_history.append({"role": "assistant", "content": reply})
+                            self.nova.state["last_task"] = comment  # ← Fix 1
+                            self.nova._save_history(comment, reply)
+                            self.nova._deliver_tool_result(reply)
                         except Exception as e:
                             self.nova.log(f"[HOLODECK VISION ERROR] {e}")
                             self.nova._deliver_tool_result(f"Vision error: {e}")
                         finally:
                             self.nova._thinking = False
-
-                    threading.Thread(target=_vision_task, daemon=True).start()
-                    return
 
         # Normal holodeck path (no image)
         self.nova._append_conv("user", f"✨ [Holodeck] {original}")

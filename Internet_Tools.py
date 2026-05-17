@@ -149,6 +149,18 @@ class InternetTools:
     # PUBLIC ENTRY POINT
     # ------------------------------------------------------------------
 
+    def _speak(self, text: str):
+        """Fire-and-forget SAPI5 speech, safe from any thread."""
+        try:
+            import pythoncom
+            import win32com.client
+            pythoncom.CoInitialize()
+            sapi = win32com.client.Dispatch("SAPI.SpVoice")
+            sapi.Speak(text)
+            pythoncom.CoUninitialize()
+        except Exception as e:
+            self._log(f"[INTERNET] SAPI5 speak failed: {e}")
+
     def enrich_task(self, task: str) -> str:
         """
         Analyse *task* and return a context block to prepend to the AI prompt.
@@ -158,8 +170,11 @@ class InternetTools:
                           'display image', 'gallery', 'slideshow', 'photograph', 'portrait']
 
         self._log(f"[INTERNET] enrich_task triggered for: {task}")
+
+
         task_lower = task.lower()
         parts = []
+
 
         # --- arXiv paper request ---
         arxiv_id = self._extract_arxiv_id(task)
@@ -655,6 +670,8 @@ class InternetTools:
 
         except Exception as e:
             self._log(f"[INTERNET] ❌ Brave search error: {e}")
+            self._speak("Warning. Web search is unavailable.")
+            self._play_sound("error.mp3", blocking=True)
             return ""
 
         hits = data.get("web", {}).get("results", [])
@@ -771,6 +788,34 @@ class InternetTools:
 
         return "\n".join(lines)
 
+    def _play_sound(self, filename, blocking=False):
+        """Play a sound file using pygame."""
+        # Get the directory where this script is located
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        path = os.path.join(script_dir, filename)
+
+        if not os.path.exists(path):
+            self._log(f"  ⚠ {filename} not found at: {path}")
+            return
+
+        try:
+            import pygame
+            import time
+
+            # Initialize pygame mixer if not already done
+            if not pygame.mixer.get_init():
+                pygame.mixer.init()
+
+            pygame.mixer.music.load(path)
+            pygame.mixer.music.play()
+
+            if blocking:
+                while pygame.mixer.music.get_busy():
+                    time.sleep(0.1)
+                time.sleep(0.2)
+
+        except Exception as e:
+            self._log(f"  ⚠ Could not play {filename}: {e}")
     # ------------------------------------------------------------------
     # URL FETCH
     # ------------------------------------------------------------------
