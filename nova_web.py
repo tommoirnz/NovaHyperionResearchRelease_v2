@@ -24,6 +24,7 @@ import os
 from urllib.parse import urlparse
 from datetime import datetime
 from personality_manager import personality_manager
+
 _history_lock = threading.Lock()
 
 
@@ -295,7 +296,6 @@ class NovaWebHandler(http.server.SimpleHTTPRequestHandler):
                 self.end_headers();
                 return
 
-
             # Personality voice takes priority
             p_voice = personality_manager.active_voice()
             voice = p_voice.get('edge_voice', 'en-AU-NatashaNeural')
@@ -495,6 +495,7 @@ class NovaWebHandler(http.server.SimpleHTTPRequestHandler):
                 self.nova._thinking = False
 
         threading.Thread(target=_holodeck_task, daemon=True).start()
+
     def _handle_tts_toggle(self):
         current = getattr(self.nova, '_web_tts_on', True)
         self.nova._web_tts_on = not current
@@ -1176,7 +1177,7 @@ pre { padding:14px; overflow-x:auto; font-size:12px; margin:0; }
       <div class="conduit-pulse"></div>
     </div>
     <div class="pill ok"><span>⚡</span> KNOWLEDGE CORE</div>
-    
+
 
     <div class="pill btn" id="tts-pill" onclick="toggleTTS()">
       <span id="tts-icon">🔊</span><span id="tts-lbl"> TTS ON</span>
@@ -1238,11 +1239,19 @@ pre { padding:14px; overflow-x:auto; font-size:12px; margin:0; }
       border:1px solid var(--teal);color:var(--teal);" onclick="snapAndSend()">
       📸 CAPTURE & ASK
     </button>
+    <button class="btn" id="cam-switch-btn"
+      style="display:none;padding:4px 10px;font-size:9px;
+      background:rgba(255,179,0,.15);border:1px solid var(--gold);color:var(--gold);"
+      onclick="switchCam()">
+      🔄 SWITCH
+    </button>
     <button class="btn" style="padding:4px 10px;font-size:9px;background:rgba(200,40,40,.15);
       border:1px solid var(--red);color:var(--red);margin-left:auto;" onclick="toggleCam()">
       ✕ CLOSE
     </button>
   </div>
+  
+  
   <video id="cam-feed" autoplay playsinline muted
     style="width:100%;max-height:200px;border-radius:6px;
     border:1px solid rgba(0,212,170,.25);background:#000;display:block;">
@@ -1294,7 +1303,7 @@ class StarfieldCanvas {
     this.offsets = [0, 0, 0];
     this.targetOffsets = [0, 0, 0];
     this.parallaxFactors = [0.008, 0.018, 0.032];
-    
+
     this._buildStars();
     this._resize();
     window.addEventListener('resize', () => this._resize());
@@ -1302,12 +1311,12 @@ class StarfieldCanvas {
     this._animate();
     this._shootingStarLoop();
   }
-  
+
   _buildStars() {
     const counts = [120, 80, 40];
     const colors = ['#6688AA', '#AAD4FF', '#FFFFFF'];
     const sizes = [[1,1], [1,2], [1,3]];
-    
+
     for (let i = 0; i < 3; i++) {
       const layer = [];
       for (let j = 0; j < counts[i]; j++) {
@@ -1324,14 +1333,14 @@ class StarfieldCanvas {
       this.layers.push(layer);
     }
   }
-  
+
   _resize() {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
     this.canvas.width = this.width;
     this.canvas.height = this.height;
   }
-  
+
   _onMouseMove(e) {
     this.mouseX = e.clientX;
     this.mouseY = e.clientY;
@@ -1343,7 +1352,7 @@ class StarfieldCanvas {
       this.targetOffsets[i] = dx * this.parallaxFactors[i] * this.width;
     }
   }
-  
+
   _spawnShootingStar() {
     const x0 = Math.random() * this.width * 0.6;
     const y0 = Math.random() * this.height * 0.4;
@@ -1352,7 +1361,7 @@ class StarfieldCanvas {
     const length = 200 + Math.random() * 200;
     const dx = length * Math.cos(rad);
     const dy = length * Math.sin(rad);
-    
+
     this.shootingStars.push({
       x0, y0, dx, dy,
       progress: 0,
@@ -1360,7 +1369,7 @@ class StarfieldCanvas {
       trail: []
     });
   }
-  
+
   _shootingStarLoop() {
     setInterval(() => {
       if (Math.random() < 0.03) {
@@ -1368,7 +1377,7 @@ class StarfieldCanvas {
       }
     }, 1000);
   }
-  
+
   _drawShootingStar(ss) {
     const len = 8;
     for (let k = 0; k < len; k++) {
@@ -1385,15 +1394,15 @@ class StarfieldCanvas {
     }
     ss.progress += ss.speed;
   }
-  
+
   _animate() {
     this.ctx.clearRect(0, 0, this.width, this.height);
-    
+
     // Smooth parallax
     for (let i = 0; i < 3; i++) {
       this.offsets[i] += (this.targetOffsets[i] - this.offsets[i]) * 0.05;
     }
-    
+
     // Draw stars
     for (let i = 0; i < 3; i++) {
       for (const star of this.layers[i]) {
@@ -1409,7 +1418,7 @@ class StarfieldCanvas {
         this.ctx.fill();
       }
     }
-    
+
     // Draw shooting stars
     this.ctx.globalAlpha = 1;
     const dead = [];
@@ -1418,7 +1427,7 @@ class StarfieldCanvas {
       if (ss.progress >= 1) dead.push(ss);
     }
     this.shootingStars = this.shootingStars.filter(ss => !dead.includes(ss));
-    
+
     requestAnimationFrame(() => this._animate());
   }
 }
@@ -1433,7 +1442,7 @@ class DodecahedronAnim {
     this.angle = 0;
     this._animate();
   }
-  
+
   _animate() {
     this.ctx.clearRect(0, 0, 30, 30);
     this.angle += 0.05;
@@ -1466,7 +1475,7 @@ class DodecahedronAnim {
     this.ctx.moveTo(pts[2].x, pts[2].y);
     this.ctx.lineTo(pts[5].x, pts[5].y);
     this.ctx.stroke();
-    
+
     requestAnimationFrame(() => this._animate());
   }
 }
@@ -1485,12 +1494,12 @@ async function initAmbient() {
   ambientGain = ambientContext.createGain();
   ambientGain.gain.value = 0.03;
   ambientGain.connect(ambientContext.destination);
-  
+
   // Create 40Hz base + 400Hz harmonic + 80Hz sub
   const sampleRate = ambientContext.sampleRate;
   const bufferSize = sampleRate * 2;
   const buffer = ambientContext.createBuffer(2, bufferSize, sampleRate);
-  
+
   for (let ch = 0; ch < 2; ch++) {
     const data = buffer.getChannelData(ch);
     for (let i = 0; i < bufferSize; i++) {
@@ -1502,7 +1511,7 @@ async function initAmbient() {
       data[i] = (base + harm + sub) * mod;
     }
   }
-  
+
   const playHum = () => {
     if (!ambientEnabled || !ambientContext) return;
     const src = ambientContext.createBufferSource();
@@ -1513,7 +1522,7 @@ async function initAmbient() {
     ambientSource = src;
     src.onended = () => { if (ambientEnabled) playHum(); };
   };
-  
+
   playHum();
   console.log('Ambient hum initialized');
 }
@@ -1561,7 +1570,7 @@ let lastCount = 0, lastContent = '', isThinking = false, userScrolled = false;
 let audioCtx = null, curAudio = null;
 let mediaRec = null, audioChunks = [], isRec = false;
 let pendingFiles = [], refCounter = 47291;
-let camStream = null;
+
 
 function toast(msg, err=false) {
   const t = document.createElement('div');
@@ -1639,29 +1648,82 @@ async function toggleTTS() {
   toast(on ? '🔊 TTS enabled' : '🔇 TTS muted');
 }
 
+let camStream = null;
+let camDevices = [];
+let camIndex = 0;
+
+async function _enumerateCams() {
+  try {
+    const devs = await navigator.mediaDevices.enumerateDevices();
+    camDevices = devs.filter(d => d.kind === 'videoinput');
+  } catch (e) {
+    camDevices = [];
+  }
+  return camDevices;
+}
+
+async function _startCamStream(deviceId) {
+  const video = deviceId
+    ? { deviceId: { exact: deviceId }, width: {ideal:1280}, height: {ideal:720} }
+    : { facingMode: 'environment',     width: {ideal:1280}, height: {ideal:720} };
+  return await navigator.mediaDevices.getUserMedia({ video, audio: false });
+}
 async function toggleCam() {
-  const panel = document.getElementById('cam-panel');
-  const feed = document.getElementById('cam-feed');
+  const panel     = document.getElementById('cam-panel');
+  const feed      = document.getElementById('cam-feed');
+  const switchBtn = document.getElementById('cam-switch-btn'); // may be null
+
   if (camStream) {
     camStream.getTracks().forEach(t => t.stop());
     camStream = null;
     feed.srcObject = null;
     panel.style.display = 'none';
+    if (switchBtn) switchBtn.style.display = 'none';
     return;
   }
   try {
-    camStream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: 'environment', width: {ideal:1280}, height: {ideal:720} },
-      audio: false
-    });
+    camStream = await _startCamStream(null);
     feed.srcObject = camStream;
     panel.style.display = 'block';
-    toast('📷 Camera preview live');
-  } catch(e) {
-    toast('❌ Camera access denied', true);
+
+    await _enumerateCams();
+
+    const activeId = camStream.getVideoTracks()[0].getSettings().deviceId;
+    const idx = camDevices.findIndex(d => d.deviceId === activeId);
+    if (idx >= 0) camIndex = idx;
+
+    if (switchBtn) {
+      if (camDevices.length > 1) {
+        switchBtn.style.display = 'inline-block';
+        switchBtn.textContent = `🔄 CAM ${camIndex+1}/${camDevices.length}`;
+      } else {
+        switchBtn.style.display = 'none';
+      }
+    }
+    toast(`📷 ${camDevices[camIndex]?.label || 'Camera'} live`);
+  } catch (e) {
+    console.error('[CAM] toggleCam error:', e);   // ← actual error in DevTools
+    toast('❌ ' + (e.message || 'Camera access denied'), true);
   }
 }
 
+
+async function switchCam() {
+  if (camDevices.length < 2 || !camStream) return;
+  camStream.getTracks().forEach(t => t.stop());
+  camIndex = (camIndex + 1) % camDevices.length;
+  try {
+    camStream = await _startCamStream(camDevices[camIndex].deviceId);
+    document.getElementById('cam-feed').srcObject = camStream;
+    document.getElementById('cam-switch-btn').textContent =
+      `🔄 CAM ${camIndex+1}/${camDevices.length}`;
+    toast(`📷 ${camDevices[camIndex].label || 'Camera ' + (camIndex+1)}`);
+  } catch (e) {
+    toast('❌ Switch failed', true);
+    // Try to recover original stream
+    try { camStream = await _startCamStream(null); document.getElementById('cam-feed').srcObject = camStream; } catch {}
+  }
+}
 async function snapAndSend() {
   if (!camStream) { toast('❌ Camera not active', true); return; }
   const feed = document.getElementById('cam-feed');
@@ -1669,12 +1731,12 @@ async function snapAndSend() {
   canvas.width = feed.videoWidth || 640;
   canvas.height = feed.videoHeight || 480;
   canvas.getContext('2d').drawImage(feed, 0, 0);
-  
+
   camStream.getTracks().forEach(t => t.stop());
   camStream = null;
   feed.srcObject = null;
   document.getElementById('cam-panel').style.display = 'none';
-  
+
   canvas.toBlob(async blob => {
     if (!blob) { toast('❌ Capture failed', true); return; }
     const fd = new FormData();
@@ -2105,8 +2167,8 @@ if(trim.startsWith('[IMAGE:')){
 } else if(trim.startsWith('[DIAGRAM:')){
     const firstLine=trim.split('\n')[0];
     const fn=firstLine.slice(9,-1);
-    
-    
+
+
     const w=document.createElement('div'); w.className='media-wrap';
     const img=document.createElement('img'); img.src='/images/'+fn;
     img.onclick=()=>window.open('/images/'+fn);
@@ -2245,7 +2307,7 @@ async function sendMessage() {
   const payload = buildFilePayload();
   if (!raw && !payload) return;
   const full = payload ? (raw ? payload + 'User comment: ' + raw : payload + 'Please analyse these files.') : raw;
-  
+
   addMessage('user', raw || (payload ? '📎 (files attached)' : ''));
   msgIn.value = '';
   msgIn.style.height = 'auto';
@@ -2253,7 +2315,7 @@ async function sendMessage() {
   isThinking = true;
   setThinking(true);
   lastCount++;
-  
+
   try {
     await fetch('/api/send', {
       method: 'POST',
@@ -2274,14 +2336,14 @@ async function sendImagine() {
   const payload = buildFilePayload();
   if (!raw && !payload) return;
   const base = payload ? (raw ? payload + 'User comment: ' + raw : payload + 'Analyse these.') : raw;
-  
+
   addMessage('user', '✨ [HOLODECK] ' + (raw || '(files)'));
   msgIn.value = '';
   msgIn.style.height = 'auto';
   isThinking = true;
   setThinking(true);
   lastCount++;
-  
+
   try {
     await fetch('/api/imagine', {
       method: 'POST',

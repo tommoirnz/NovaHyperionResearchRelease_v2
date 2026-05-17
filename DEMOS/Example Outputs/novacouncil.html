@@ -1,0 +1,75 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<title>Nova Response — 15/05/2026, 9:18:53 pm</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']],processEscapes:true},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<style>
+*{box-sizing:border-box;}
+body{background:#04080F;color:#D0E8FF;font-family:'Share Tech Mono',monospace;padding:40px 20px;line-height:1.75;}
+.c{max-width:960px;margin:0 auto;background:rgba(10,20,40,.75);border:1px solid rgba(0,212,170,.25);border-radius:10px;padding:32px;}
+h1,h2,h3,h4{font-family:'Orbitron',monospace;color:#FFB300;margin:1em 0 .4em;}
+h1{font-size:1.5em;} h2{font-size:1.2em;} h3{font-size:1em;}
+h1:first-child,h2:first-child{margin-top:0;}
+.ts{color:#3C64A0;font-size:10px;margin-bottom:24px;}
+p{margin-bottom:.75em;}
+hr{border:none;height:1px;background:linear-gradient(90deg,transparent,#FFB300,transparent);margin:1.2em 0;}
+pre{background:#060C18;padding:14px;border-radius:6px;overflow-x:auto;border:1px solid rgba(0,212,170,.2);margin:.75em 0;}
+code{background:rgba(0,212,170,.12);color:#00D4AA;padding:1px 5px;border-radius:3px;font-size:.9em;}
+blockquote{border-left:3px solid #00D4AA;padding-left:12px;margin:.75em 0;color:#008C6E;}
+a{color:#7EB8FF;}
+ul,ol{margin:.5em 0 .75em 1.4em;}
+li{margin-bottom:.25em;}
+strong{color:#fff;}
+table{border-collapse:collapse;width:100%;margin:.85em 0;font-size:13px;overflow-x:auto;display:block;}
+thead tr{background:rgba(255,179,0,.12);}
+th{padding:7px 11px;border:1px solid rgba(126,184,255,.25);color:#FFB300;font-weight:bold;text-align:left;}
+td{padding:6px 11px;border:1px solid rgba(126,184,255,.18);text-align:left;}
+tbody tr:nth-child(even){background:rgba(255,255,255,.03);}
+img{max-width:100%;border-radius:6px;}
+.pb{position:fixed;top:14px;right:14px;padding:8px 18px;
+background:linear-gradient(135deg,#FF6B35,#CC4422);border:none;border-radius:4px;
+color:#fff;cursor:pointer;font-family:'Orbitron',monospace;font-weight:bold;font-size:11px;z-index:999;}
+@media print{.pb{display:none;}body{background:#fff;color:#000;}.c{background:#fff;border:none;}}
+</style></head><body>
+<button class="pb" onclick="window.print()">🖨 PRINT / PDF</button>
+<div class="c">
+<h1>⚡ NOVA — KNOWLEDGE COMPUTER</h1>
+<div class="ts">Generated: 15/05/2026, 9:18:53 pm</div>
+<p>Yes — and the inspection confirms it&#39;s a solid piece of architecture. Here&#39;s the full picture:</p>
+<hr>
+<h2>What NovaCouncil Actually Is</h2>
+<p>Five specialised agents — <strong>Analyst, Creative, Critic, Strategist, Empath</strong> — each with a distinct cognitive role and output format. They&#39;re not arbitrary personas; they represent modes that a single-pass LLM call tends to collapse together. A vanilla response optimises for plausibility and fluency. The Council forces independent passes that prioritise accuracy, novelty, fault-finding, long-term thinking, and emotional tone <em>separately</em>, before synthesis.</p>
+<p>The wiring is clean:</p>
+<ul>
+<li><strong>Task-type routing</strong> maps question categories (<code>research</code>, <code>creative</code>, <code>math</code>, <code>code</code>, <code>social</code>) to the most relevant agent subset</li>
+<li><strong>Parallel execution</strong> via <code>ThreadPoolExecutor</code> — agents run concurrently, not sequentially, so latency doesn&#39;t stack</li>
+<li><strong>Sequential mode</strong> is also available, where each agent sees prior outputs — useful for iterative refinement</li>
+<li><strong>Deliberation cache</strong> with a 5-minute TTL avoids redundant calls on repeated queries</li>
+<li><strong>Synthesis step</strong> produces a final Nova response that integrates all perspectives without exposing the internal scaffolding</li>
+</ul>
+<hr>
+<h2>Where It&#39;s Genuinely Better</h2>
+<ul>
+<li><strong>Complex decisions</strong> — architectural, strategic, or philosophical questions where a single agent tends toward confident but shallow answers</li>
+<li><strong>Creative work</strong> — the Analyst would normally suppress lateral ideas; separating Creative and Analyst lets both breathe</li>
+<li><strong>Risk assessment</strong> — the Critic surfaces failure modes that a single optimistic pass glosses over</li>
+<li><strong>Research synthesis</strong> — Analyst + Strategist + Critic is a strong combination for evaluating evidence and implications</li>
+</ul>
+<hr>
+<h2>Where It&#39;s Pure Overhead</h2>
+<ul>
+<li><strong>Factual lookups</strong> — weather, dates, simple facts don&#39;t need a committee</li>
+<li><strong>Simple code tasks</strong> — four agents debating a loop is theatre</li>
+<li><strong>Conversational exchanges</strong> — latency becomes actively annoying when you just want a quick answer</li>
+</ul>
+<p>The task-type router partially addresses this — <code>default</code> only invokes Analyst + Empath, which is lightweight. But the routing decision still needs to be sharp.</p>
+<hr>
+<h2>The Weak Link</h2>
+<p>The <strong>synthesis step</strong>. The Council is only better than a single well-prompted call if the synthesiser is genuinely <em>integrating</em> perspectives — not just appending them with headers. The current synthesis prompt is reasonable, but if the underlying <code>generate()</code> call doesn&#39;t have enough context or instruction weight, you can end up with a response that&#39;s less coherent than a single focused call, at 3–5× the cost and latency.</p>
+<hr>
+<h2>Verdict</h2>
+<p><strong>Better for hard problems. Worse for routine ones.</strong> The architecture is sound — parallel agents, task-type routing, caching, and a synthesis layer are all the right ideas. The bones are good.</p>
+<p>The missing piece is a <strong>pre-deliberation classifier</strong> that decides: <em>does this question actually warrant the full Council, or should it bypass to a single-agent fast path?</em> Without that, you&#39;re firing a committee at every question — including the ones that just need a quick answer.</p>
+<p>Wire that classifier in, and the Council becomes a genuine upgrade. As it stands, it&#39;s a powerful tool that&#39;s occasionally used on nails that don&#39;t need a sledgehammer.</p>
+
+</div></body></html>

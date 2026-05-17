@@ -1,0 +1,760 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<title>Nova Response — 16/05/2026, 12:23:50 am</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']],processEscapes:true},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<style>
+*{box-sizing:border-box;}
+body{background:#04080F;color:#D0E8FF;font-family:'Share Tech Mono',monospace;padding:40px 20px;line-height:1.75;}
+.c{max-width:960px;margin:0 auto;background:rgba(10,20,40,.75);border:1px solid rgba(0,212,170,.25);border-radius:10px;padding:32px;}
+h1,h2,h3,h4{font-family:'Orbitron',monospace;color:#FFB300;margin:1em 0 .4em;}
+h1{font-size:1.5em;} h2{font-size:1.2em;} h3{font-size:1em;}
+h1:first-child,h2:first-child{margin-top:0;}
+.ts{color:#3C64A0;font-size:10px;margin-bottom:24px;}
+p{margin-bottom:.75em;}
+hr{border:none;height:1px;background:linear-gradient(90deg,transparent,#FFB300,transparent);margin:1.2em 0;}
+pre{background:#060C18;padding:14px;border-radius:6px;overflow-x:auto;border:1px solid rgba(0,212,170,.2);margin:.75em 0;}
+code{background:rgba(0,212,170,.12);color:#00D4AA;padding:1px 5px;border-radius:3px;font-size:.9em;}
+blockquote{border-left:3px solid #00D4AA;padding-left:12px;margin:.75em 0;color:#008C6E;}
+a{color:#7EB8FF;}
+ul,ol{margin:.5em 0 .75em 1.4em;}
+li{margin-bottom:.25em;}
+strong{color:#fff;}
+table{border-collapse:collapse;width:100%;margin:.85em 0;font-size:13px;overflow-x:auto;display:block;}
+thead tr{background:rgba(255,179,0,.12);}
+th{padding:7px 11px;border:1px solid rgba(126,184,255,.25);color:#FFB300;font-weight:bold;text-align:left;}
+td{padding:6px 11px;border:1px solid rgba(126,184,255,.18);text-align:left;}
+tbody tr:nth-child(even){background:rgba(255,255,255,.03);}
+img{max-width:100%;border-radius:6px;}
+.pb{position:fixed;top:14px;right:14px;padding:8px 18px;
+background:linear-gradient(135deg,#FF6B35,#CC4422);border:none;border-radius:4px;
+color:#fff;cursor:pointer;font-family:'Orbitron',monospace;font-weight:bold;font-size:11px;z-index:999;}
+@media print{.pb{display:none;}body{background:#fff;color:#000;}.c{background:#fff;border:none;}}
+</style></head><body>
+<button class="pb" onclick="window.print()">🖨 PRINT / PDF</button>
+<div class="c">
+<h1>⚡ NOVA — KNOWLEDGE COMPUTER</h1>
+<div class="ts">Generated: 16/05/2026, 12:23:50 am</div>
+<p>SELF_INSPECT:scan all files and list all methods found across the entire Nova codebase||SCAN_ALL: 630 methods across 45 files</p>
+<h3><code>nova_assistant_v1.py</code></h3>
+<pre><code>def validate_environment():
+    def _play_sound(filename, blocking=False):
+def play_mp3(filename):
+def _speak_startup(text):
+def _font(f, s, w=&quot;normal&quot;): return (f, s, w)
+def check_ollama_running():
+def start_ollama():
+def wait_for_ollama(timeout=15):
+class NovaAssistant(NovaTTS, NovaSelfImproveUI, NovaRouter):
+    def __init__(self):
+    def _init_backend(self):
+        def _patched(code, **kwargs):
+            def _upd():
+    def _get_ollama_models(self):
+    def _background_ollama_poller(self):
+        def _poll():
+    def _refresh_models(self):
+    def try_tool(self, user_input):
+    def ai_choose_tool(self, user_input):
+    def try_ai_tool(self, user_input):
+                        def score(p):
+    def _build_header(self):
+    def _drag_start(self, e):
+    def _drag_motion(self, e):
+    def _minimize(self):
+        def _restore():
+    def _maximize(self):
+    def _section(self, parent, title, bc=SEAM, bg=BG_LEFT):
+    def _styled_combo(self, parent, values, default=0):
+    def _build_left(self):
+    def _build_model_panel(self, parent):
+    def _on_model_change(self, _=None):
+    def get_environment(self):
+    def load_location(self):
+    def show_diagram(self, pdf_path, store=True):
+    def _add_web_controls(self):
+    def _toggle_web(self):
+    def _open_web(self):
+    def show_graphviz_diagram(self, path, store=True, target_frame=None):
+        def redraw():
+        def zoom_wheel(event):
+        def start_pan(event):
+        def pan_move(event):
+        def fit(event=None):
+    def save_plot_for_web(self, figure_or_path):
+    def _create_message_text(self, parent, text):
+        def _needs_scroll():
+        def _adjust_height():
+        def _on_wheel(event):
+    def _clean_markdown(self, text):
+    def _pulse_model(self):
+    def _build_whisper_panel(self, parent):
+    def _update_whisper_status(self, status):
+    def _draw_record_btn(self, idle=True):
+    def _start_rec(self, _=None):
+    def _stop_rec(self, _=None):
+    def _space_press(self, e):
+    def _space_release(self, e):
+    def _animate_record_ring(self):
+    def _update_record_timer(self):
+    def _build_input_panel(self, parent):
+    def _set_placeholder(self):
+    def _inp_focus_in(self, _=None):
+    def _inp_focus_out(self, _=None):
+    def _inp_key(self, _=None):
+    def _on_enter_key(self, event):
+    def _get_input(self):
+    def _build_action_buttons(self, parent):
+    def _draw_save_chat_btn(self, hover=False):
+    def _save_chat_to_desktop(self):
+    def _draw_aux_btn(self, hover=False):
+    def _draw_document_btn(self, hover=False):
+    def _draw_send_btn(self, hover=False):
+    def _make_links_clickable(self, text_widget):
+            def open_link(event, url=match.group(0)):
+    def _draw_diagnose_btn(self, hover=False):
+    def _thinking_animation(self):
+    def _draw_clear_btn(self, hover=False):
+    def _draw_globe(self, active=False):
+    def _load_local_pdf(self):
+    def _send_code_to_autocoder(self, code):
+    def _handle_pdf_button(self):
+    def _set_internet_indicator(self, active):
+    def _run_doc_summary(self, prompt):
+    def _build_history_row(self, parent):
+    def _draw_hist_btn(self, c, label, accent, hover):
+    def _blink_cursor(self):
+    def _build_debug_console(self, parent):
+    def log(self, msg):
+    def _build_right(self):
+    def _toggle_latex(self):
+    def _maybe_render_latex(self, text: str):
+        def speak():
+    def _render_latex_in_browser(self, text):
+            def protect(m):
+    def _open_paper_tools(self):
+    def _open_aux_window(self):
+        def make_btn(parent, label, colour, command):
+    def _open_token_window(self):
+        def _on_configure(event):
+        def _on_canvas_resize(event):
+        def row(parent, label, value, colour=&quot;#C8D6E5&quot;):
+        def reset_session():
+    def _send_to_autocoder(self, code):
+    def _build_conversation_panel(self, parent):
+        def _configure_canvas(event):
+        def _resize_canvas(event):
+        def _on_mousewheel(event):
+    def _fetch_live_pricing(self):
+    def _toggle_detach_conv(self):
+    def _detach_conv(self):
+    def _dock_conv(self):
+        def _rebuild_all():
+    def _create_message_in_frame(self, target_frame, target_canvas, role, text):
+    def _rebuild_message(self, target_frame, target_canvas, role, text=None, diagram_path=None):
+    def _create_detached_conversation(self, parent):
+        def _configure_frame(event):
+    def _append_to_detached(self, role, text):
+    def _expand_conv(self):
+    def _display_with_code_blocks(self, parent, text):
+    def _build_code_panel(self, parent):
+    def _draw_halt_btn(self, active=False):
+    def _append_conv(self, role, text):
+        def _ins():
+    def _clear_conversation(self):
+    def _new_chat(self):
+    def _show_history(self):
+    def _show_lessons(self):
+    def _record_tokens(self, tokens_in, tokens_out, model=&quot;&quot;):
+    def _on_halt(self):
+    def _on_goof(self, error_output):
+    def _decay_affect(self):
+    def _on_sandbox_output(self, output):
+    def _review_mistake(self, task, error_type, code, output):
+        def save():
+        def discard():
+    def _on_token_limit_hit(self):
+    def _on_send(self):
+    def _on_clear(self):
+    def save_state(self):
+    def load_state(self):
+    def _deliver_tool_result(self, tool_result):
+    def _save_response_as_html(self, content, save_btn=None):
+    def _dot_generator(self):
+    def _ask_code_permission(self, task, internet_ctx=&quot;&quot;):
+        def _yes():
+        def _no():
+    def _run_autocoder(self, task, internet_ctx=&quot;&quot;):
+    def clean_code_for_execution(self, text: str) -&gt; str:
+    def _draw_evolve_btn(self, hover=False):
+    def _draw_debug_btn(self, hover=False):
+    def _draw_search_bar(self, active=False):
+    def _animate_search_bar(self):
+    def _start_nova_flash(self):
+    def _stop_nova_flash(self):
+    def _animate_nova_flash(self):
+    def update_character_count(self, _=None):
+    def _show_evolve_tooltip(self):
+    def _hide_evolve_tooltip(self):
+    def undock_system_log(self, target_widget=None):
+    def _toggle_detach_syslog(self):
+    def _detach_syslog(self):
+    def _create_detached_syslog(self, parent):
+    def _dock_syslog(self):
+    def _expand_syslog(self):
+    def _build_resize_handle(self):
+    def _draw_resize_grip(self, hover=False):
+    def _resize_start(self, event):
+    def _resize_motion(self, event):
+    def _resize_end(self, event):
+    def _on_mouse_press(self, event):
+    def _on_mouse_move(self, event):
+    def _on_mouse_release(self, event):
+    def resize_panel(self, width, height):
+    def _on_resize_enter(self, event=None):
+    def _on_resize_leave(self, event=None):
+</code></pre>
+<h3><code>paper_tools_window.py</code></h3>
+<pre><code>class PaperToolsWindow(tk.Toplevel):
+    def _chime_done(self):
+    def _build_ui(self):
+    def run_custom_request(self):
+        def worker():
+    def summarise_paper(self):
+    def extract_algorithms(self):
+    def run_example(self):
+    def extract_examples(self):
+    def implement_algorithm(self):
+</code></pre>
+<h3><code>nova_math_researcher.py</code></h3>
+<pre><code>def update_status(**kwargs):
+class TailHandler(logging.Handler):
+    def emit(self, record):
+class ResearchJournal:
+    def append(self, entry: dict):
+    def today_entries(self) -&gt; list:
+    def recent_survivors(self, n: int = 6) -&gt; list:
+async def notify_nova(finding: dict):
+def build_dashboard(journal: ResearchJournal) -&gt; str:
+def make_handler(journal: ResearchJournal):
+    class Handler(BaseHTTPRequestHandler):
+        def do_GET(self):
+        def log_message(self, format, *args):
+def start_dashboard_server(journal: ResearchJournal):
+async def ollama_generate(prompt: str, system: str = &quot;&quot;, timeout: int = 120) -&gt; str:
+async def claude_generate(prompt: str, system: str = &quot;&quot;, timeout: int = 180) -&gt; str:
+async def arxiv_check(summary: str) -&gt; str:
+async def generate_conjecture(domain: str) -&gt; Optional[dict]:
+def safe_exec_test(code: str, n: int) -&gt; Optional[bool]:
+async def verify_conjecture(conjecture: dict, trials: int = NUMERICAL_TRIALS) -&gt; dict:
+async def attempt_proof(conjecture: dict, verification: dict) -&gt; str:
+def generate_digest(journal: ResearchJournal) -&gt; str:
+class MathResearcher:
+    def next_domain(self) -&gt; str:
+    async def run_cycle(self):
+    async def run(self):
+    def stop(self):
+async def main():
+</code></pre>
+<h3><code>nova_selfimprove_ui.py</code></h3>
+<pre><code>class NovaSelfImproveUI:
+    def _run_evolution(self):
+        def _go():
+        def _history():
+        def _cancel():
+    def _evolution_worker(self):
+    def _feature_worker(self, feature_request):
+                def _progress(step_num, total, step_desc):
+            def _show():
+    def _show_evolution_history(self):
+    def _run_debug(self):
+    def _debug_worker(self, symptom, target=&quot;current version&quot;):
+    def _debug_external_file(self, symptom, file_path):
+    def _show_in_code_window(self, code):
+    def _run_diagnostic(self):
+        def _browse():
+        def _scan_all():
+    def _diagnostic_worker(self, target):
+    def _full_scan_worker(self):
+    def _show_diagnostic_report(self, report, issues, target):
+        def _send_to_evolve():
+        def _send_to_debug():
+    def _send_diagnostic_to_evolve(self, issues):
+    def _run_documentation(self):
+    def _documentation_worker(self, target):
+    def _run_doc_cycle_on_source(self, source, progress_callback=None):
+    def _fix_bare_docstrings(self, source):
+</code></pre>
+<h3><code>nova_ai.py</code></h3>
+<pre><code>def resolve_pdf_url(url):
+def download_pdf(url, filename=&quot;downloaded_paper.pdf&quot;):
+class WorkingAI:
+    def set_affect(self, affect_instance):
+    def _encode_image(self, image_path):
+    def _build_affect_context(self) -&gt; str:
+    def _is_cloud_model(self, name):
+    def generate(self, prompt, use_planning=True, image_path=None, temperature=None):
+    def _generate_ollama(self, prompt, temperature=None, image_path=None):
+    def _generate_cloud(self, prompt, temperature=None, system_prompt=None, image_path=None):
+    def generate_code(self, task, error_context=None, error_type=None):
+    def react_agent(self, user_prompt, tools, history=&quot;&quot;, internet_ctx=&quot;&quot;, max_steps=6):
+    def extract_pdf_text(self, path, max_chars=100000):
+    def _load_disk_cache(self):
+    def _save_disk_cache(self):
+    def _get_error_cache_key(self, error_type, query):
+    def _get_cached_error_search(self, error_type, query):
+    def _cache_error_search(self, error_type, query, results):
+    def _extract_package_name(self, query):
+</code></pre>
+<h3><code>nova_router.py</code></h3>
+<pre><code>class NovaRouter:
+    def _process_input(self, user_input):
+    def _needs_council(self, user_input: str) -&gt; bool:
+    def _build_full_history_string(self):
+    def _save_history(self, user_input, result):
+    def _handle_react(self, user_input, history_str):
+    def _is_react_trigger(self, user_input):
+    def process_agent_response(self, raw_response, context):
+    def _handle_internet_search_nonblocking(self, user_input, history_str):
+    def _handle_internet_search(self, user_input, history_str):
+    def _handle_planner(self, user_input, history_str, internet_ctx):
+    def build_recent_history(self, n=100):
+    def build_env_context(self):
+    def _handle_code_intent(self, user_input, internet_ctx=&quot;&quot;, history_str=&quot;&quot;):
+    def _maybe_play_contextual_sound(self, user_input, response):
+        def _play():
+    def _extract_and_send_code(self, response):
+    def _get_affect_modifier(self) -&gt; str:
+    def _check_for_prospective(self, user_input: str, response: str):
+    def _extract_semantic_facts(self, user_input: str, response: str):
+</code></pre>
+<h3><code>nova_manager.py</code></h3>
+<pre><code>class ManagerAgent:
+    def analyse(self, plan, force_mode=None):
+    def execute(
+    def supervise(self, results, user_input):
+    def supervise_plan(self, plan, user_input):
+</code></pre>
+<h3><code>nova_tts.py</code></h3>
+<pre><code>class NovaTTS:
+    def _init_tts_state(self):
+    def _init_tts_engine(self):
+        def _worker():
+    def _build_tts_panel(self, parent):
+    def _draw_tts_btn(self):
+    def _draw_stop_c(self, c, hover):
+    def _draw_rec_btn(self):
+    def _populate_voices(self):
+    def _populate_edge_voices(self):
+    def _toggle_tts(self, _=None):
+    def _toggle_recording(self):
+    def _on_tts_engine_change(self, _=None):
+    def speak_text(self, text, is_math=False):
+    def _stop_speaking(self):
+    def _speak_edge(self, text, voice, rate):
+            async def _run():
+    def _play_chime(self, freq=880, ms=140, vol=0.20):
+</code></pre>
+<h3><code>nova_whisper.py</code></h3>
+<pre><code>class WhisperHandler:
+    def _wrap(self, status):
+    def load_model(self, model_name=&quot;medium.en&quot;, device=&quot;cuda&quot;):
+        def _load():
+    def start_recording(self):
+    def _record(self):
+    def stop_recording(self):
+    def _transcribe(self):
+    def _insert(self, text):
+    def get_recording_time(self):
+</code></pre>
+<h3><code>nova_widgets.py</code></h3>
+<pre><code>class _CanvasTooltip:
+    def _on_enter(self, event=None):
+    def _on_leave(self, event=None):
+</code></pre>
+<h3><code>agent_executor.py</code></h3>
+<pre><code>class AgentExecutor:
+    def run_tasks(self, tasks, internet_ctx=&quot;&quot;, history_str=&quot;&quot;):
+    def run_tasks_sequential(self, tasks: List[Dict[str, Any]], internet_ctx: str = &quot;&quot;, history_str: str = &quot;&quot;) -&gt; List[
+    def _run_agent(self, task, internet_ctx=&quot;&quot;, history_str=&quot;&quot;):
+                def _update_preview(c=code):
+                def run_code():
+    def _format_history_for_agent(self, history_str, max_exchanges=50):
+    def _translate_file_command(self, text):
+</code></pre>
+<h3><code>planner.py</code></h3>
+<pre><code>class TaskPlanner:
+    def _split_conversation_exchanges(self, history_str):
+    def _is_follow_up(self, user_input):
+    def _get_current_topic(self, history_str, exchanges=None):
+    def _extract_relevant_context(self, history_str, last_exchanges=3):
+    def _should_keep_full_context(self, user_input):
+    def _extract_relevant_context_for_followup(self, recent_context, topic, user_input):
+    def _clean_response(self, response):
+    def _repair_json(self, response):
+    def _is_bad_output(self, text):
+    def create_plan(self, user_input, history_str=&quot;&quot;, last_exchanges=20):
+</code></pre>
+<h3><code>code_execution_loop.py</code></h3>
+<pre><code>class CodeExecutionLoop:
+    def _is_duplicate_code(self, new_code: str) -&gt; bool:
+    def _detect_error_loop(self, error_type: str) -&gt; bool:
+    def extract_task_requirements(self, user_request: str) -&gt; list:
+    def _force_variation(self, user_request: str, error_type: str = None) -&gt; str:
+    def run_with_loop_detection(self, user_request: str) -&gt; Tuple[bool, str, int, Dict[str, Any]]:
+    def _report_progress(self, score: float):
+    def _clear_old_plots(self):
+    def _solution_is_good_enough(self, output: str, task: str) -&gt; Tuple[bool, float, str]:
+    def _extract_error_type(self, error_text: str) -&gt; str:
+    def _build_cache_key(self, error_type: str, query: str) -&gt; str:
+    def _normalize_error_type(self, error_type: str) -&gt; str:
+    def _build_search_query(self, task: str, error: str = None) -&gt; str:
+    def _get_documentation_context(self, task: str) -&gt; Optional[str]:
+</code></pre>
+<h3><code>mistake_memory.py</code></h3>
+<pre><code>class MistakeMemory:
+    def _load_mistakes(self):
+    def _save_mistakes(self):
+    def classify_task(self, task: str) -&gt; str:
+    def extract_libraries(self, code_or_error: str) -&gt; List[str]:
+    def save_mistake(self, task: str, error_type: str, failed_code: str,
+    def _is_bad_lesson(self, lesson: str, libraries: list) -&gt; bool:
+    def _generate_lesson(self, task_type: str, error_type: str,
+    def _is_duplicate_mistake(self, new_mistake: Dict) -&gt; bool:
+    def _increment_pattern_count(self, error_type: str, task_type: str):
+    def get_relevant_warnings(self, task: str, max_warnings: int = 5) -&gt; str:
+    def get_statistics(self) -&gt; Dict[str, Any]:
+    def clear_old_mistakes(self, days: int = 30):
+        def _is_recent(m):
+    def export_lessons(self) -&gt; str:
+</code></pre>
+<h3><code>latex_window.py</code></h3>
+<pre><code>class LatexWindow(tk.Toplevel):
+    def _build_toolbar(self):
+        def btn(text, cmd, side=&quot;left&quot;, fg=None):
+    def _build_body(self):
+    def _start_drag(self, e):
+    def _do_drag(self, e):
+    def _on_mouse_wheel(self, event):
+    def _on_text_size_change(self):
+    def _on_math_size_change(self):
+    def set_text_font(self, family=None, size=None):
+    def set_math_pt(self, pt):
+    def refresh_document(self):
+    def render_png_bytes(self, latex, fontsize=None, dpi=180, display=False):
+    def _render_expr(self, latex, fontsize, dpi, use_usetex, display):
+    def split_text_math(self, text):
+    def clear(self):
+    def copy_raw_latex(self):
+    def show_document(self, text):
+    def _render_blocks(self, blocks):
+    def _insert_math_image(self, content, kind):
+    def append_document(self, text):
+    def center_on_screen(self):
+    def _log(self, msg):
+    def _sanitize_latex(self, expr):
+</code></pre>
+<h3><code>code_window.py</code></h3>
+<pre><code>class CodeWindow(tk.Toplevel):
+    def _setup_sandbox_venv(self):
+    def _create_ui(self):
+    def set_code(self, code: str, auto_run=False, from_smart_loop=False):
+    def _save_code_to_file(self, code):
+    def _extract_imports(self, code: str) -&gt; set:
+    def on_goof_button(self):
+    def _check_dependencies(self, code: str) -&gt; tuple:
+    def _install_package(self, package_name: str) -&gt; bool:
+    def _ensure_dependencies(self, code: str) -&gt; bool:
+    def _run_code_safe(self, from_smart_loop=False):
+    def _run_with_dependencies(self, code: str):
+    def _stop_execution(self):
+    def _halt_code_generation(self):
+    def reset_for_new_task(self):
+    def _detect_plotting(self, code: str) -&gt; bool:
+    def _wrap_code_for_plotting(self, code: str) -&gt; tuple:
+    def _wrap_code_for_safety(self, code: str) -&gt; str:
+    def _execute_code(self, code: str, retry_count=0):
+            def read_stdout():
+            def read_stderr():
+    def _start_plot_watcher(self, plot_path: str):
+        def watch():
+    def _send_input_line(self, event=None):
+    def _append_output(self, text: str, is_error=False):
+    def _finish_execution(self, stdout, stderr, returncode, plot_path):
+    def _send_output_to_ai(self):
+    def _save_plot(self):
+    def _open_plot(self):
+    def _show_output(self, text: str, is_error=False):
+    def _clear_output(self):
+    def _reset_ui_after_execution(self):
+    def _copy_code(self):
+    def _clear_code(self):
+    def show(self):
+    def hide(self):
+</code></pre>
+<h3><code>code_display.py</code></h3>
+<pre><code>class CodeDisplay:
+    def _configure_tags(self):
+    def _on_text_scroll_y(self, *args):
+    def _update_line_numbers(self):
+    def get_code(self):
+    def set_editable(self, editable=True):
+    def _apply_syntax_highlighting(self):
+    def _copy_selection(self, event=None):
+    def _copy_with_line_numbers(self):
+    def _select_all(self):
+    def _show_context_menu(self, event):
+    def pack(self, **kwargs):
+    def grid(self, **kwargs):
+    def pack_forget(self):
+    def destroy(self):
+</code></pre>
+<h3><code>theme_manager.py</code></h3>
+<pre><code>class ThemeManager:
+    def apply(self, name):
+    def _recolour(self, widget, t):
+    def _luminance(hex_colour):
+class ThemePicker(tk.Toplevel):
+    def _swatch(self, parent, name, colours, row, col):
+        def _select(n=name, ind=indicator):
+</code></pre>
+<h3><code>self_improver.py</code></h3>
+<pre><code>class SelfImprover:
+    def _load_history(self):
+    def _log_entry(self, base_name, version, feature_request, changes_made):
+    def export_history(self):
+    def _get_current_version(self, base_name):
+    def _versioned_filename(self, base_name, version):
+    def _current_path(self, base_name):
+    def _next_path(self, base_name):
+    def read_source(self, base_name):
+    def _read_plain(self, base_name):
+    def _write_new_version(self, base_name, new_source, change_description):
+    def _infer_relevant_files(self, text):
+    def _backup_file(self, base_name):
+    def _write_in_place(self, base_name, new_source, change_description):
+    def _find_owner_file(self, fn_name, default=&quot;nova_assistant&quot;):
+    def _import_check(self, source, step_num):
+    def _extract_new_classes(self, code):
+    def _extract_error_context(self, source, error_msg):
+    def _retry_patch(self, step_description, current_source, error_msg, attempt):
+    def validate_code(self, code):
+    def _extract_signatures(self, source):
+    def _extract_all_signatures(self):
+    def _split_into_functions(self, code):
+    def _function_exists(self, source, function_name):
+    def _decompose_feature(self, feature_request):
+    def run_multi_step_feature(self, feature_request, progress_callback=None):
+    def run_debug_cycle(self, symptom):
+    def run_documentation_cycle(self, base_name=&quot;nova_assistant&quot;,
+    def run_diagnostic(self, source):
+    def _parse_diagnostic_issues(self, report):
+    def run_full_scan(self):
+    def run_debug_cycle_on_file(self, symptom, target_path):
+    def run_feature_cycle(self, feature_request, source_override=None, force_files=None):
+    def run_improvement_cycle(self):
+</code></pre>
+<h3><code>asr_whisper.py</code></h3>
+<pre><code>class ASR:
+    def transcribe(self, audio, sample_rate):
+</code></pre>
+<h3><code>nova_memory.py</code></h3>
+<pre><code>class NovaMemory:
+    def set_logger(self, log_func):
+    def _ensure_index(self):
+    def store_conversation(self, user_input: str, response: str):
+    def recall_conversations(self, query: str, n_results: int = 5) -&gt; List[Dict]:
+    def store_fact(self, fact: str, source: str = &quot;conversation&quot;, confidence: float = 0.8):
+    def recall_facts(self, query: str, min_confidence: float = 0.0) -&gt; List[str]:
+    def learn_pattern(self, task_type: str, approach: str, success: bool):
+    def get_preferred_approach(self, task_type: str) -&gt; Optional[str]:
+    def store_preference(self, key: str, value: Any):
+    def get_preference(self, key: str, default: Any = None) -&gt; Any:
+    def set_reminder(self, context: str, action: str, trigger: str = &quot;user_returns&quot;) -&gt; str:
+    def get_pending_reminders(self) -&gt; List[Dict]:
+    def mark_reminder_triggered(self, reminder_id: str):
+    def add_prospective(self, reminder: str, context: str = &quot;&quot;):
+    def get_pending_prospective(self) -&gt; list:
+    def mark_prospective_done(self, index: int):
+    def get_stats(self) -&gt; Dict:
+    def store_semantic(self, key: str, value: str, confidence: float = 1.0):
+    def get_semantic_context(self) -&gt; str:
+</code></pre>
+<h3><code>nova_affect.py</code></h3>
+<pre><code>class NovaAffect:
+    def _load_state(self) -&gt; Dict[str, float]:
+    def _save_state(self):
+    def update(self, event_type: str, magnitude: float = 1.0, metadata: Dict = None):
+    def decay(self):
+    def get_response_modifiers(self) -&gt; Dict[str, Any]:
+    def enhance_prompt(self, base_prompt: str) -&gt; str:
+    def get_emotional_expression(self) -&gt; Optional[str]:
+    def get_state(self) -&gt; Dict[str, float]:
+</code></pre>
+<h3><code>nova_council.py</code></h3>
+<pre><code>class NovaCouncil:
+    def deliberate(self, task: str, task_type: str = &quot;default&quot;,
+    def _deliberate_parallel(self, task: str, agents: List[str],
+    def _deliberate_sequential(self, task: str, agents: List[str],
+    def _build_agent_prompt(self, agent_name: str, task: str, context: str) -&gt; str:
+    def _synthesise(self, task: str, outputs: Dict[str, str],
+    def clear_cache(self):
+</code></pre>
+<h3><code>tools/geometry_tool.py</code></h3>
+<pre><code>def plot_geometry(query: str, log_callback=None) -&gt; str:
+def _match(desc: str, keywords: list) -&gt; bool:
+def _num(desc: str, patterns: list, default: float) -&gt; float:
+def _base_fig(size=(7, 7)):
+def _finish(ax, title: str):
+def _solve_kepler(M_arr: np.ndarray, e: float, iters: int = 12) -&gt; np.ndarray:
+def _lissajous(desc: str):
+def _spiral(desc: str):
+def _rose(desc: str):
+def _orbit(desc: str):
+def _hypocycloid(desc: str):
+def _epicycloid(desc: str):
+def _fourier(desc: str):
+def _sine_wave(desc: str):
+def _koch_snowflake(desc: str):
+    def _next_gen(points):
+def _perspective_grid(desc: str):
+def _solar_system(desc: str):
+def _parametric(desc: str):
+def _np_safe():
+def _best_guess(desc: str):
+</code></pre>
+<h3><code>nova_research_hooks.py</code></h3>
+<pre><code>def save_finding_as_html(finding: dict) -&gt; Path:
+    def md_to_html(text):
+def _build_email_html(finding: dict, report_path: Path = None) -&gt; str:
+def send_email(finding: dict, report_path: Path = None):
+def send_email_async(finding: dict, report_path: Path = None):
+class ResearchWatcher:
+    def start(self):
+    def _handle_chemistry(self, finding: dict):
+    def _handle(self, finding: dict):
+</code></pre>
+<h3><code>personality_routes.py</code></h3>
+<pre><code>def api_get_personalities():
+def api_set_personality():
+def api_reload_personalities():
+</code></pre>
+<h3><code>personality_manager.py</code></h3>
+<pre><code>class PersonalityManager:
+    def _load_all(self):
+    def reload(self):
+    def names(self) -&gt; list[str]:
+    def all(self) -&gt; list[dict]:
+    def get(self, name: str) -&gt; dict | None:
+    def active(self) -&gt; dict | None:
+    def active_name(self) -&gt; str | None:
+    def activate(self, name: str) -&gt; dict:
+    def deactivate(self):
+    def build_system_prompt(self, nova_base_prompt: str) -&gt; str:
+    def active_temperature(self, fallback: float = DEFAULT_TEMPERATURE) -&gt; float:
+    def active_voice(self) -&gt; dict:
+</code></pre>
+<h3><code>document_reader.py</code></h3>
+<pre><code>def read_document(path):
+def read_pdf(path):
+def read_text(path):
+def read_url(url):
+</code></pre>
+<h3><code>math_speech.py</code></h3>
+<pre><code>class MathSpeechConverter:
+    def _extract_braced(self, s: str, start: int):
+    def _speakify_frac(self, s: str) -&gt; str:
+    def _apply_pairs(self, s: str, pairs: List[Tuple[str, str]]) -&gt; str:
+    def _strip_nested(self, s, command):
+    def convert_math_to_speech(self, tex: str) -&gt; str:
+    def _speakify_matrix(self, tex: str) -&gt; str:
+    def _speakify_integral(self, tex: str) -&gt; str:
+        def _fmt(prefix, m):
+    def _speakify_differential(self, tex: str) -&gt; str:
+    def _speakify_summation(self, tex: str) -&gt; str:
+    def _speakify_limits(self, tex: str) -&gt; str:
+    def _fix_differential_pronunciation(self, s: str) -&gt; str:
+    def _fix_simple_powers(self, s: str) -&gt; str:
+    def _normalize_delimiters(self, s: str) -&gt; str:
+    def _extract_math_tokens(self, s: str):
+        def _repl_block(m):
+        def _repl_inline(m):
+    def make_speakable_text(self, text: str, speak_math: bool = True) -&gt; str:
+</code></pre>
+<h3><code>tools/audio_tools.py</code></h3>
+<pre><code>def play_audio_from_url(url):
+</code></pre>
+<h3><code>tools/camera_vision.py</code></h3>
+<pre><code>def camera_vision(prompt, ai_instance):
+</code></pre>
+<h3><code>tools/diagram_tool.py</code></h3>
+<pre><code>def _create_graphviz_diagram(text, filename=None):
+    def safe_id(name):
+def diagram(description, ai, output_dir=&quot;diagrams&quot;):
+</code></pre>
+<h3><code>tools/document_tools.py</code></h3>
+<pre><code>def summarise_document_from_source(source):
+</code></pre>
+<h3><code>tools/download_tools.py</code></h3>
+<pre><code>def download_file(url, download_dir=&quot;downloads&quot;):
+</code></pre>
+<h3><code>tools/file_explorer.py</code></h3>
+<pre><code>def _resolve_path(path):
+def _get_media_dirs():
+def _extract_search_keyword(query, media_type=&quot;video&quot;):
+def file_explorer(query, path=None):
+def _read_file(file_path, raw=False):
+def _list_directory(dir_path):
+def _find_files(search_dir, pattern):
+def _search_files(search_dir, keyword):
+def _tree(dir_path, max_depth=3, _depth=0, _prefix=&quot;&quot;):
+def _copy_file(src, dst):
+def _save_text(file_path, content):
+def _delete_file(file_path):
+def _fmt_size(size):
+</code></pre>
+<h3><code>tools/image_tools.py</code></h3>
+<pre><code>def search_and_show_image(query, internet_tools, image_dir):
+</code></pre>
+<h3><code>tools/nova_research_digest.py</code></h3>
+<pre><code>def _load_journal(path: Path) -&gt; list:
+def _summarise_math(entries: list, max_findings: int) -&gt; tuple:
+def _summarise_chemistry(entries: list, max_findings: int) -&gt; tuple:
+def get_research_digest(query: str = &quot;&quot;, ai=None, max_findings: int = 10) -&gt; str:
+def list_research_findings(query: str = &quot;&quot;, ai=None) -&gt; str:
+def generate_missing_reports() -&gt; str:
+</code></pre>
+<h3><code>tools/web_tools.py</code></h3>
+<pre><code>def open_webpage(query, internet_tools):
+</code></pre>
+<h3><code>tools/play_local_music.py</code></h3>
+<pre><code>def play_local_music(query=None, internet_tools=None):
+</code></pre>
+<h3><code>tools/play_local_video.py</code></h3>
+<pre><code>def play_local_video(query=None, internet_tools=None):
+</code></pre>
+<h3><code>tools/self_inspect.py</code></h3>
+<pre><code>def _get_project_root():
+def _collect_sources(root):
+def _extract_sigs(source: str) -&gt; list:
+def _build_method_index(full_source: str) -&gt; dict:
+def self_inspect(query=None):
+</code></pre>
+<h3><code>tools/sound_tools.py</code></h3>
+<pre><code>def play_sound_from_url(url, download_dir):
+def _best_audio_match(urls, query):
+def _extract_audio_urls(text, base_url=&quot;&quot;):
+def _search_for_sound_url(query, internet_tools):
+def search_and_play_sound(query, download_dir, internet_tools=None):
+</code></pre>
+<h3><code>tools/sympy_exec.py</code></h3>
+<pre><code>def sympy_exec(code: str, log_callback=None) -&gt; str:
+</code></pre>
+<h3><code>tools/write_file.py</code></h3>
+<pre><code>def write_file(path, content):
+</code></pre>
+<h3><code>tools/youtube_tools.py</code></h3>
+<pre><code>def play_youtube_video(query):
+</code></pre>
+
+</div></body></html>
